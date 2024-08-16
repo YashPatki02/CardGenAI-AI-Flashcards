@@ -7,8 +7,8 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-    title: "FlashCrdsAI",
-    description: "AI-powered flashcards",
+    title: "CardGen AI",
+    description: "AI-powered Flashcards for Students",
 };
 
 export default function RootLayout({

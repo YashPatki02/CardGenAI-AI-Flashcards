@@ -1,20 +1,19 @@
 "use client";
 import { useState } from "react";
-// import { useAuth } from "@/context/AuthContext";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-// import { login } from "../app/(home)/login/actions";
 import { redirect } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 const Login = () => {
-    /* const { login } = useAuth();
+    const { login } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
-    
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
 
-    const handleLogin = async (e) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
@@ -22,29 +21,27 @@ const Login = () => {
         try {
             await login(email, password);
             console.log("Logged in successfully!");
-        } catch (error) {
+        } catch (error: any) {
             setError(error.message);
         } finally {
             setLoading(false);
         }
-    }; */
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
+    };
 
     const handleSubmit = async (formData: FormData) => {
         setError(null); // Reset error state
 
-        // const result = await login(formData);
-        // console.log("in handle submit");
-        // if (!result.success) {
-        //     setError(result.error as string);
-        //     console.log("error has occur", result.error);
-        // } else {
-        //     // Redirect to dashboard on successful login
-        //     console.log("successfully logged in ");
-        //     redirect("/dashboard");
-        // }
+        const email = formData.get("email") as string;
+        const password = formData.get("password") as string;
+
+        try {
+            await login(email, password);
+            redirect("/flashcards");
+        } catch (error: any) {
+            setError(error.message);
+        }
     };
+
     return (
         // <form  className="space-y-4">
         <form action={handleSubmit} className="space-y-4">
@@ -54,8 +51,8 @@ const Login = () => {
                     id="email"
                     type="email"
                     name="email"
-                    // value={email}
-                    // onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Email"
                     required
                 />
@@ -66,18 +63,18 @@ const Login = () => {
                     id="password"
                     type="password"
                     name="password"
-                    // value={password}
-                    // onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="Password"
                     required
                 />
             </div>
             {/* {error && <p className="text-red-500">{error}</p>} */}
             {error && <p className="text-red-500">{error}</p>}
-            <Button type="submit" disabled={loading}>
+            <Button disabled={loading} onClick={handleLogin}>
                 {loading ? "Logging in..." : "Login"}
             </Button>
-            {/* <button formAction={login}>Submit</button> */}
+            
         </form>
     );
 };

@@ -1,14 +1,12 @@
+"use client";
 import { Button } from "@/components/ui/button";
-// import { signOut } from "@/utils/actions/signout";
+import { useAuth } from "@/context/AuthContext";
 
 const Logout = () => {
+    const { logout } = useAuth();
+
     return (
-        // <form action={signOut} method="POST">
-        //     <Button className="text-md" variant="secondary" type="submit">
-        //         Logout
-        //     </Button>
-        // </form>
-        <Button className="text-md" variant="secondary" type="submit">
+        <Button onClick={logout} variant="secondary" className="text-md">
             Logout
         </Button>
     );

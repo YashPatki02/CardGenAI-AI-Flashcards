@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
@@ -11,13 +12,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/context/AuthContext";
 
-const Nav = async () => {
-    // const supabase = createClient();
+const Nav = () => {
+    const { currentUser } = useAuth();
 
-    // const {
-    //     data: { user },
-    // } = await supabase.auth.getUser();
+    console.log(currentUser);
 
     return (
         <header className="flex flex-row w-full items-center justify-between px-12 py-4 shadow-md">
@@ -33,13 +33,13 @@ const Nav = async () => {
                 <Link href="/dashboard">Dashboard</Link>
                 <Link href="/dashboard">Team</Link>
 
-                {/* {user === null ? (
+                {currentUser === null ? (
                     <Link href="/login">
                         <Button className="text-md">Get Started</Button>
                     </Link>
                 ) : (
                     <Logout />
-                )} */}
+                )}
             </nav>
             <div className="flex items-center sm:hidden">
                 <DropdownMenu>
