@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Apple, Award, BicepsFlexed } from "lucide-react";
+import { Bot, Library, Share } from "lucide-react";
 
 const Features = () => {
     return (
@@ -10,28 +10,26 @@ const Features = () => {
                     Features
                 </span>
                 <h2 className="text-3xl font-heading font-semibold text-center sm:text-4xl">
-                    Personalized and Tailored to You
+                    Personalized for your Study Neeeds
                 </h2>
             </div>
             <p className="text-center text-lg max-w-2xl text-muted-foreground">
-                Our platform is designed to provide you with the best experience
-                possible, so all you need to worry about is achieving your
-                goals.
+                Our features are designed to help you study smarter, not harder. We have everything you need to get started with your flashcards journey.
             </p>
             <div className="grid grid-cols-1 gap-6 mt-8 sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
                 <Card className="shadow-lg">
                     <CardContent className="flex flex-col items-start gap-4 p-6">
                         <div className="inline-flex items-center justify-center rounded-md border-border bg-secondary p-2">
-                            <BicepsFlexed
+                            <Bot
                                 size={28}
                                 strokeWidth={3}
                                 className="text-primary"
                             />
                         </div>
                         <div>
-                            <h3 className="text-lg font-semibold text-foreground mb-2">Personal Training</h3>
+                            <h3 className="text-lg font-semibold text-foreground mb-2">AI-Flashcards</h3>
                             <p className="text-muted-foreground">
-                                Personalized workout plans tailored to your goals.
+                                Create flashcards with ease with the help of AI.
                             </p>
                         </div>
                     </CardContent>
@@ -39,16 +37,16 @@ const Features = () => {
                 <Card className="shadow-lg">
                     <CardContent className="flex flex-col items-start gap-4 p-6">
                         <div className="inline-flex items-center justify-center rounded-md border-border bg-secondary p-2">
-                            <Apple
+                            <Library
                                 size={28}
                                 strokeWidth={3}
                                 className="text-primary"
                             />
                         </div>
                         <div>
-                            <h3 className="text-lg font-semibold text-foreground mb-2">Nutrition</h3>
+                            <h3 className="text-lg font-semibold text-foreground mb-2">Public Library</h3>
                             <p className="text-muted-foreground">
-                                Personalized nutrition plans tailored to your needs.
+                                Access thousands of flashcards created by others.
                             </p>
                         </div>
                     </CardContent>
@@ -56,16 +54,16 @@ const Features = () => {
                 <Card className="shadow-lg">
                     <CardContent className="flex flex-col items-start gap-4 p-6">
                         <div className="inline-flex items-center justify-center rounded-md border-border bg-secondary p-2">
-                            <Award
+                            <Share
                                 size={28}
                                 strokeWidth={3}
                                 className="text-primary"
                             />
                         </div>
                         <div>
-                            <h3 className="text-lg font-semibold text-foreground mb-2">Coaching</h3>
+                            <h3 className="text-lg font-semibold text-foreground mb-2">Share Knowledge</h3>
                             <p className="text-muted-foreground">
-                                Personalized coaching tailored to your needs.
+                                Share your flashcards with your friends and classmates.
                             </p>
                         </div>
                     </CardContent>

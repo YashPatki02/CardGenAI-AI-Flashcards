@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
-import { Activity, Menu, LucideLogOut } from "lucide-react";
+import { NotepadTextDashed, Menu } from "lucide-react";
 import Logout from "./Logout";
 import {
     DropdownMenu,
@@ -17,21 +17,23 @@ import { useAuth } from "@/context/AuthContext";
 const Nav = () => {
     const { currentUser } = useAuth();
 
-    console.log(currentUser);
-
     return (
         <header className="flex flex-row w-full items-center justify-between px-12 py-4 shadow-md">
             <Link href="/" className="flex flex-row gap-2 items-center">
-                <Activity
+                <NotepadTextDashed
                     size={24}
                     strokeWidth={3}
                     className="font-bold text-primary"
                 />
-                <h1 className="text-2xl font-bold">SweatAI</h1>
+                <h1 className="text-2xl font-bold">CardGenAI</h1>
             </Link>
             <nav className="hidden items-center gap-8 space-x-4 sm:flex">
-                <Link href="/dashboard">Dashboard</Link>
-                <Link href="/dashboard">Team</Link>
+                <Link href="/dashboard" className="text-md font-semibold">
+                    Dashboard
+                </Link>
+                <Link href="/dashboard" className="text-md font-semibold">
+                    Team
+                </Link>
 
                 {currentUser === null ? (
                     <Link href="/login">
@@ -62,7 +64,7 @@ const Nav = () => {
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
-                            {/* {user === null ? (
+                            {currentUser === null ? (
                                 <Link href="/login">
                                     <Button className="text-md">
                                         Get Started
@@ -70,7 +72,7 @@ const Nav = () => {
                                 </Link>
                             ) : (
                                 <Logout />
-                            )} */}
+                            )}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

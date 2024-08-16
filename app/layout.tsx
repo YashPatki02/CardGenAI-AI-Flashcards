@@ -7,7 +7,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-    title: "CardGen AI",
+    title: "CardGenAI",
     description: "AI-powered Flashcards for Students",
 };
 
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body className={`${inter.className}`}>
                 <AuthProvider>
                     <Nav />
                     {children}
