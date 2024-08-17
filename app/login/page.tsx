@@ -14,10 +14,10 @@ import { redirect } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
-    const { currentUser } = useAuth();
+    const { currentUser, isLoading } = useAuth();
 
-    if (currentUser) {
-        redirect("/flashcards");
+    if (!isLoading && currentUser) {
+        redirect("/");
     }
 
     return (
@@ -58,4 +58,5 @@ export default function LoginPage() {
             </div>
         </main>
     );
-}
+  }
+

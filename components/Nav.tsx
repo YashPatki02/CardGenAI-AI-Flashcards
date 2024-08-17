@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
-import { NotepadTextDashed, Menu } from "lucide-react";
+import { NotepadTextDashed, Menu, LucideLogOut } from "lucide-react";
 import Logout from "./Logout";
 import {
     DropdownMenu,
@@ -13,9 +13,12 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/context/AuthContext";
+import { redirect } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 
 const Nav = () => {
-    const { currentUser } = useAuth();
+    const { currentUser, isLoading, logout } = useAuth();
 
     return (
         <header className="flex flex-row w-full items-center justify-between px-12 py-4 shadow-md">
@@ -28,19 +31,44 @@ const Nav = () => {
                 <h1 className="text-2xl font-bold">CardGenAI</h1>
             </Link>
             <nav className="hidden items-center gap-8 space-x-4 sm:flex">
-                <Link href="/dashboard" className="text-md font-semibold">
-                    Dashboard
-                </Link>
-                <Link href="/dashboard" className="text-md font-semibold">
-                    Team
-                </Link>
+                {currentUser && (
+                    <Link href="/flashcards" className="text-md font-semibold">
+                        My Decks
+                    </Link>
+                )}
 
                 {currentUser === null ? (
                     <Link href="/login">
                         <Button className="text-md">Get Started</Button>
                     </Link>
                 ) : (
-                    <Logout />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            <Avatar>
+                                <AvatarImage
+                                    src="https://github.com/shadcn.png"
+                                    alt="@shadcn"
+                                />
+                                <AvatarFallback>CN</AvatarFallback>
+                            </Avatar>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                            side="bottom"
+                            sideOffset={12}
+                            align="end"
+                            className="w-[200px]"
+                        >
+                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>Profile</DropdownMenuItem>
+                            <DropdownMenuItem>Billing</DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={logout}>
+                                <LucideLogOut size={15} className="mr-2" />
+                                Logout
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 )}
             </nav>
             <div className="flex items-center sm:hidden">
@@ -54,14 +82,18 @@ const Nav = () => {
                         align="end"
                         className="w-[200px]"
                     >
-                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                        <DropdownMenuLabel>Account</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <Link href="/dashboard">Dashboard</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <Link href="/dashboard">Team</Link>
-                        </DropdownMenuItem>
+                        {currentUser && (
+                            <DropdownMenuItem>
+                                <Link href="/cards">
+                                    <Button className="text-md">
+                                        My Decks
+                                    </Button>
+                                </Link>
+                            </DropdownMenuItem>
+                        )}
+
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
                             {currentUser === null ? (
