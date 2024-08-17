@@ -4,10 +4,11 @@ import { Card } from '@/components/ui/card';
 import { useAuth } from '@/context/AuthContext'
 import { redirect } from 'next/navigation'
 import FlashcardDeck from '@/components/FlashcardDeck'
+import { useRouter } from 'next/navigation';
 
 const Flashcards = () => {
   const { currentUser } = useAuth()
-
+const router = useRouter()
   if (!currentUser) {
     redirect('/login')
   }
@@ -17,7 +18,7 @@ const Flashcards = () => {
           <div className="flex flex-row items-start justify-between w-full">
               <h1 className="text-3xl font-bold">Your Decks</h1>
               <Button
-                  onClick={() => redirect("/flashcards/new")}
+                  onClick={() => router.push("/flashcards/upload")}
                   className="text-md font-semibold"
                   size="lg"
               >
