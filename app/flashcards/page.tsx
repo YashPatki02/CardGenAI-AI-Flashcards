@@ -4,14 +4,38 @@ import { Card } from "@/components/ui/card";
 import { useAuth } from "@/context/AuthContext";
 import { redirect } from "next/navigation";
 import FlashcardDeck from "@/components/FlashcardDeck";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getFlashcardsByUserId } from "@/lib/firebaseUtils";
 
 const Flashcards = () => {
-    const { currentUser, isLoading } = useAuth();
+  const { isLoading, currentUser } = useAuth();
+  const router = useRouter();
 
-    if (!isLoading && !currentUser) {
-        redirect("/login");
+  //   !
+  const [flashcards, setFlashcards] = useState([]);
+  useEffect(() => {
+    const getData = async () => {
+      // const id = "eKlEoznoXBbABrBN4tjIf7ycECu1"; // Replace with dynamic ID if necessary
+      const id = currentUser.uid;
+      //   const id = currentUser.uid;
+      try {
+        const data = await getFlashcardsByUserId(id);
+        console.log("Flashcards:", data);
+        setFlashcards(data);
+        // Handle flashcards data
+      } catch (error) {
+        console.error("Error loading flashcards:");
+      }
+    };
+    if (isLoading && !currentUser) {
+      //
+      console.log("no current users");
+      //
+      return redirect("/login");
     }
+    getData();
+  }, []);
 
     return (
         <section className="container flex flex-col items-start gap-8 pt-8 px-8 md:px-20 sm:gap-10 min-h-screen">

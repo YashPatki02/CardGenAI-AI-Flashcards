@@ -1,29 +1,32 @@
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 
 interface FlashcardDeckProps {
-    title: string;
+  title: string;
     numberCards: number;
-    description: string;
-    creator: string;
-    createdAt: string;
+  description: string;
+  creator: string;
+  createdAt: string;
+  docID: string;
 }
 
 const FlashcardDeckCard = ({
-    title,
+  title,
     numberCards,
-    description,
-    creator,
-    createdAt,
+  description,
+  creator,
+  createdAt,
+  docID,
 }: FlashcardDeckProps) => {
     return (
         <Card className="w-full hover:shadow-md">
@@ -50,3 +53,4 @@ const FlashcardDeckCard = ({
 };
 
 export default FlashcardDeckCard;
+

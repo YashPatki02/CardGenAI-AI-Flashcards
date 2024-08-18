@@ -28,23 +28,10 @@ const Login = () => {
         }
     };
 
-    const handleSubmit = async (formData: FormData) => {
-        setError(null); // Reset error state
-
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
-
-        try {
-            await login(email, password);
-            redirect("/flashcards");
-        } catch (error: any) {
-            setError(error.message);
-        }
-    };
 
     return (
         // <form  className="space-y-4">
-        <form action={handleSubmit} className="space-y-4">
+        <form  className="space-y-4">
             <div className="space-y-1">
                 <Label htmlFor="email">Email</Label>
                 <Input
