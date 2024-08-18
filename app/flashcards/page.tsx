@@ -7,9 +7,9 @@ import FlashcardDeck from "@/components/FlashcardDeck";
 import Link from "next/link";
 
 const Flashcards = () => {
-    const { currentUser } = useAuth();
+    const { currentUser, isLoading } = useAuth();
 
-    if (!currentUser) {
+    if (!isLoading && !currentUser) {
         redirect("/login");
     }
 
