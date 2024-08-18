@@ -14,7 +14,7 @@ import { redirect } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
-    const { currentUser, isLoading } = useAuth();
+   const { currentUser, isLoading } = useAuth(); 
 
     if (!isLoading && currentUser) {
         redirect("/");
