@@ -16,7 +16,6 @@ import { useAuth } from "@/context/AuthContext";
 import { redirect } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-
 const Nav = () => {
     const { currentUser, isLoading, logout } = useAuth();
 
@@ -86,11 +85,7 @@ const Nav = () => {
                         <DropdownMenuSeparator />
                         {currentUser && (
                             <DropdownMenuItem>
-                                <Link href="/cards">
-                                    <Button className="text-md">
-                                        My Decks
-                                    </Button>
-                                </Link>
+                                <Link href="/flashcards">My Decks</Link>
                             </DropdownMenuItem>
                         )}
 
