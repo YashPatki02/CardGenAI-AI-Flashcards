@@ -15,6 +15,7 @@ import {
 import { db } from "@/firebase";
 import { collection, doc, getDoc, writeBatch } from "firebase/firestore";
 import { useAuth } from "@/context/AuthContext";
+import { addFlashcard } from "@/lib/firebaseUtils";
 
 export default function Generate() {
   interface Flashcard {
@@ -75,21 +76,40 @@ export default function Generate() {
   //   !
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  //   const saveFlashcard = () => {
-  //     if (!title) {
-  //       return;
-  //     }
-  //     // check if the title already exist
 
-  //     // else save to base
-  //   };
   const { currentUser } = useAuth();
-  const saveFlashcards = async () => {
+  const getFormattedDate = () => {
+    const today = new Date();
+    return today
+      .toLocaleDateString("en-US", {
+        month: "2-digit",
+        day: "2-digit",
+        year: "numeric",
+      })
+      .replace(/\//g, "-");
+  };
+
+  const saveFlashcard = async () => {
     if (!title.trim()) {
       alert("Please enter a name for your flashcard set.");
       return;
     }
-    //! add to the data base
+    //! add to the database
+    const flashcard_obj = {
+      title: title,
+      description: description,
+      private: true,
+      questions: flashcard,
+      created_at: getFormattedDate(),
+    };
+    console.log(flashcard_obj);
+    try {
+      const userId = "eKlEoznoXBbABrBN4tjIf7ycECu1"; //! Replace this
+      const docId = await addFlashcard(userId, flashcard_obj);
+      console.log("Flashcard added successfully");
+    } catch (error) {
+      console.error("Error saving flashcard:", error);
+    }
   };
   return (
     <>
@@ -113,6 +133,7 @@ export default function Generate() {
       </div>
       {/* {true && ( */}
       {flashcard.length > 0 && (
+        // ! gets the Title and description
         <div className="grid grid-cols-1 gap-4 w-full mt-3">
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="Title">Title</Label>
@@ -130,9 +151,11 @@ export default function Generate() {
               type="text"
               id="Description"
               placeholder="Enter Description..."
+              value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
+          {/* Maps the flashcards */}
           {flashcard.map((card, index) => (
             <div key={index} className="flex flex-row grow w-full">
               <Card className="w-full">
@@ -154,7 +177,7 @@ export default function Generate() {
             </div>
           ))}
           <div>
-            <Button onClick={saveFlashcards}>Create Flashcard</Button>
+            <Button onClick={saveFlashcard}>Create Flashcard</Button>
           </div>
         </div>
       )}
