@@ -1,42 +1,57 @@
+"use client";
 import { getFlashcardByDocId } from "@/lib/firebaseUtils";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { redirect } from "next/navigation";
 
-export default async function Flashcard({
-  params,
-}: {
-  params: { docId: string };
-}) {
+export default function Flashcard({ params }: { params: { docId: string } }) {
   interface Question {
     front: string;
     back: string;
   }
 
-   interface Flashcard {
+  interface Flashcard {
     title: string;
     description: string;
     created_at: string;
     questions: Question[];
   }
-  const userId = "eKlEoznoXBbABrBN4tjIf7ycECu1"; // Replace with actual user ID
+  // !
+  const { currentUser, isLoading } = useAuth();
+  // !
+  const [flashcard, setFlashcard] = useState<Flashcard>();
+  //
+  useEffect(() => {
+    const getData = async () => {
+      const data: Flashcard | null = await getFlashcardByDocId(
+        currentUser.uid,
+        params.docId
+      );
+      console.log(data);
+      if (!data) {
+        console.log("error loading flashcards");
+        return <> loading{params.docId}</>;
+      }
+      setFlashcard(data);
+    };
+    if (isLoading && !currentUser) {
+      //
+      console.log("no current users");
+      //
+      return redirect("/login");
+    }
+    getData();
+  }, []);
 
-  const flashcard: Flashcard | null = await getFlashcardByDocId(userId, params.docId);
-  console.log(flashcard);
-  if (!flashcard) {
-    // If flashcard is not found, trigger a 404 error
-    // notFound();
-    console.log("error loading flashcards");
-    return <> loading{params.docId}</>;
-  }
   return (
     <div>
       <div>
         <h1>Flashcard Details</h1>
-        <p>Title: {flashcard.title}</p>
-        <p>Description: {flashcard.description}</p>
-        <p>Created At: {flashcard.created_at}</p>
+        <p>Title: {flashcard?.title}</p>
+        <p>Description: {flashcard?.description}</p>
+        <p>Created At: {flashcard?.created_at}</p>
         <div>
-          {flashcard.questions && flashcard.questions.length > 0 ? (
+          {flashcard?.questions && flashcard?.questions?.length > 0 ? (
             flashcard.questions.map((question, index) => (
               <div key={index}>
                 <p>

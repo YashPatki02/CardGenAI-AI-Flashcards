@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,6 +16,7 @@ import { db } from "@/firebase";
 import { collection, doc, getDoc, writeBatch } from "firebase/firestore";
 import { useAuth } from "@/context/AuthContext";
 import { addFlashcard } from "@/lib/firebaseUtils";
+import { redirect } from "next/navigation";
 
 export default function Generate() {
   interface Flashcard {
@@ -23,20 +24,7 @@ export default function Generate() {
     back: string;
   }
   // !states for generate
-  const [flashcard, setFlashcard] = useState<Flashcard[]>([
-    {
-      front: "What is React?",
-      back: "A JavaScript library for building user interfaces.",
-    },
-    {
-      front: "What is TypeScript?",
-      back: "A typed superset of JavaScript that compiles to plain JavaScript.",
-    },
-    {
-      front: "What is Tailwind CSS?",
-      back: "A utility-first CSS framework for rapid UI development.",
-    },
-  ]);
+  const [flashcard, setFlashcard] = useState<Flashcard[]>([]);
   const [prompt, setPrompt] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -77,7 +65,17 @@ export default function Generate() {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
-  const { currentUser } = useAuth();
+  const { currentUser, isLoading } = useAuth();
+  // !use effect
+  useEffect(() => {
+    if (isLoading && !currentUser) {
+      //
+      console.log("no current users");
+      //
+      return redirect("/login");
+    }
+  }, []);
+  // !get date
   const getFormattedDate = () => {
     const today = new Date();
     return today
@@ -104,7 +102,7 @@ export default function Generate() {
     };
     console.log(flashcard_obj);
     try {
-      const userId = "eKlEoznoXBbABrBN4tjIf7ycECu1"; //! Replace this
+      const userId = currentUser.uid;
       const docId = await addFlashcard(userId, flashcard_obj);
       console.log("Flashcard added successfully");
     } catch (error) {

@@ -16,6 +16,7 @@ import {
 
 // firestore function
 import { doc, getDoc } from "firebase/firestore";
+import { registerUser } from "@/lib/firebaseUtils";
 
 interface AuthContextProps {
     currentUser: any;
@@ -34,8 +35,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [currentUser, setCurrentUser] = useState();
     const [isLoading, setLoading] = useState(true);
 
-    function signup(email: string, password: string) {
-        return createUserWithEmailAndPassword(auth, email, password);
+    async function signup(email: string, password: string) {
+      // return createUserWithEmailAndPassword(auth, email, password);
+      try {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const user = userCredential.user;
+        console.log("userid", user.uid)
+        try{
+            await registerUser(user.uid, email);
+            setCurrentUser(user);
+            console.log("register the user")
+        }catch(err){
+            console.log("unable to add user to the db")
+        }
+        // Add user to Firestore
+
+        // Update current user state
+      } catch (error) {
+        console.error("Error during signup:", error);
+      }
     }
 
     //   Login with email and password

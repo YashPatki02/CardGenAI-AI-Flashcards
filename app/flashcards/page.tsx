@@ -9,16 +9,15 @@ import { useEffect, useState } from "react";
 import { getFlashcardsByUserId } from "@/lib/firebaseUtils";
 
 const Flashcards = () => {
-  const { currentUser } = useAuth();
+  const { isLoading, currentUser } = useAuth();
   const router = useRouter();
-  if (!currentUser) {
-    redirect("/login");
-  }
+
   //   !
   const [flashcards, setFlashcards] = useState([]);
   useEffect(() => {
     const getData = async () => {
-      const id = "eKlEoznoXBbABrBN4tjIf7ycECu1"; // Replace with dynamic ID if necessary
+      // const id = "eKlEoznoXBbABrBN4tjIf7ycECu1"; // Replace with dynamic ID if necessary
+      const id = currentUser.uid;
       //   const id = currentUser.uid;
       try {
         const data = await getFlashcardsByUserId(id);
@@ -29,6 +28,12 @@ const Flashcards = () => {
         console.error("Error loading flashcards:");
       }
     };
+    if (isLoading && !currentUser) {
+      //
+      console.log("no current users");
+      //
+      return redirect("/login");
+    }
     getData();
   }, []);
 
@@ -44,19 +49,22 @@ const Flashcards = () => {
           Create Deck
         </Button>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start justify-start w-full gap-8 mt-8">
-        {flashcards.map((flashcard) => (
-          <FlashcardDeck
-            key={flashcard.id}
-            title={flashcard.title}
-            description={flashcard.description}
-            creator="John Doe" // Replace or remove as needed
-            createdAt={flashcard.created_at}
-            docID={flashcard.id}
-          />
-        ))}
-      </div>
+      {flashcards.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start justify-start w-full gap-8 mt-8">
+          {flashcards.map((flashcard) => (
+            <FlashcardDeck
+              key={flashcard?.id}
+              title={flashcard?.title}
+              description={flashcard?.description}
+              creator="John Doe" //! Replace or remove as needed
+              createdAt={flashcard?.created_at}
+              docID={flashcard?.id}
+            />
+          ))}
+        </div>
+      ) : (
+        <div>Create new flashcard by clicking create flashcard button</div>
+      )}
     </section>
   );
 };
