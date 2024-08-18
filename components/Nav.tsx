@@ -85,7 +85,11 @@ const Nav = () => {
                         <DropdownMenuSeparator />
                         {currentUser && (
                             <DropdownMenuItem>
-                                <Link href="/flashcards">My Decks</Link>
+                                <Link href="/cards">
+                                    <Button className="text-md">
+                                        My Decks
+                                    </Button>
+                                </Link>
                             </DropdownMenuItem>
                         )}
 
