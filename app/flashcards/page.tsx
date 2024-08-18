@@ -14,7 +14,7 @@ const Flashcards = () => {
     }
 
     return (
-        <section className="container flex flex-col items-center gap-8 pt-8 px-14 sm:gap-10 min-h-screen">
+        <section className="container flex flex-col items-start gap-8 pt-8 px-8 md:px-20 sm:gap-10 min-h-screen">
             <div className="flex flex-row items-center justify-between w-full">
                 <h1 className="text-2xl font-bold md:text-3xl">My Decks</h1>
                 <Link href="/create">
