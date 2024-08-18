@@ -7,10 +7,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 
 interface FlashcardDeckProps {
   title: string;
+    numberCards: number;
   description: string;
   creator: string;
   createdAt: string;
@@ -19,28 +22,35 @@ interface FlashcardDeckProps {
 
 const FlashcardDeckCard = ({
   title,
+    numberCards,
   description,
   creator,
   createdAt,
   docID,
 }: FlashcardDeckProps) => {
-  return (
-    <Card className="w-full md:w-[360px] lg:w-[320px]">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-2">
-        <p className="text-sm text-muted-foreground">Created by: {creator}</p>
-        <p className="text-sm text-muted-foreground">Date: {createdAt}</p>
-      </CardContent>
-      <CardFooter className="flex justify-end">
-        <Link href={`/flashcards/${docID}`} passHref>
-          <Button variant="outline">View Deck</Button>
-        </Link>
-      </CardFooter>
-    </Card>
-  );
+    return (
+        <Card className="w-full hover:shadow-md">
+            <CardHeader>
+                <CardTitle>{title}</CardTitle>
+                <CardDescription>{description}</CardDescription>
+                <Badge className="text-sm mr-auto">{numberCards} Cards</Badge>
+            </CardHeader>
+            <CardContent className="flex flex-row items-start justify-start gap-2">
+                <Avatar>
+                    <AvatarImage src="" alt="@shadcn" />
+                    <AvatarFallback>{creator[0]}</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col items-start justify-start">
+                    <p className="text-sm font-semibold">{creator}</p>
+                    <p className="text-sm text-muted-foreground">{createdAt}</p>
+                </div>
+            </CardContent>
+            <CardFooter className="flex justify-end">
+                <Button variant="outline">View Deck</Button>
+            </CardFooter>
+        </Card>
+    );
 };
 
 export default FlashcardDeckCard;
+
