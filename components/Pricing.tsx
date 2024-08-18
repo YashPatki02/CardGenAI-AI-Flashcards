@@ -2,8 +2,29 @@ import React from "react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Check } from "lucide-react";
+import getStripe from "@/utils/get-stripe";
 
 const Pricing = () => {
+    const handleSubmit = async (priceId: string): Promise<void> => {
+        console.log("priceId ", priceId);
+        const checkoutSession = await fetch("/api/checkout_sessions", {
+            method: "POST",
+            headers: { origin: "http://localhost:3000" },
+            body: JSON.stringify({ priceId }),
+        });
+        const checkoutSessionJson = await checkoutSession.json();
+
+        const stripe = await getStripe();
+        const { error } = await stripe!.redirectToCheckout({
+            // This is type asssertion (!) -- not safe gotta change it
+            sessionId: checkoutSessionJson.id,
+        });
+
+        if (error) {
+            console.warn(error.message);
+        }
+    };
+
     return (
         <section
             id="features"
@@ -76,8 +97,8 @@ const Pricing = () => {
                     <CardContent className="divide-y p-0">
                         <div className="flex flex-col items-center px-7 py-10">
                             <span
-                                className={`absolute inset-x-0 -top-5 mx-auto w-32 rounded-full 
-                                    bg-primary px-3 py-2 text-center text-sm font-semibold 
+                                className={`absolute inset-x-0 -top-5 mx-auto w-32 rounded-full
+                                    bg-primary px-3 py-2 text-center text-sm font-semibold
                                     text-primary-foreground shadow-md`}
                             >
                                 Most Popular
@@ -94,7 +115,16 @@ const Pricing = () => {
                                 </span>
                                 <span className="text-sm">/month</span>
                             </div>
-                            <Button className="mt-8 w-full">Get Started</Button>
+                            <Button
+                                onClick={() =>
+                                    handleSubmit(
+                                        "price_1PpGTSFJSAPpXIUXTZctLMqF"
+                                    )
+                                }
+                                className="mt-8 w-full"
+                            >
+                                Get Started
+                            </Button>
                         </div>
                         <ul className="p-7 py-10 space-y-2">
                             <li className="flex items-center gap-2">
@@ -145,7 +175,16 @@ const Pricing = () => {
                                 </span>
                                 <span className="text-sm">/month</span>
                             </div>
-                            <Button className="mt-8 w-full">Get Started</Button>
+                            <Button
+                                onClick={() =>
+                                    handleSubmit(
+                                        "price_1PpGVeFJSAPpXIUXGZwI82OE"
+                                    )
+                                }
+                                className="mt-8 w-full"
+                            >
+                                Get Started
+                            </Button>
                         </div>
                         <ul className="p-7 py-10 space-y-2">
                             <li className="flex items-center gap-2">
