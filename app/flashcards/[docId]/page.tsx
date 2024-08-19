@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, LoaderCircle } from "lucide-react";
 import {
     Tooltip,
     TooltipContent,
@@ -27,48 +27,43 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
         created_at: string;
         questions: Question[];
     }
+
     const { currentUser, isLoading } = useAuth();
-    const [flashcard, setFlashcard] = useState<Flashcard>({
-        id: "",
-        title: "",
-        description: "",
-        created_at: "",
-        questions: [],
-    });
+    const [flashcard, setFlashcard] = useState<Flashcard | null>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [flipped, setFlipped] = useState<boolean[]>([]);
     const [viewMode, setViewMode] = useState<"single" | "all">("single");
     const [flashcardLoading, setFlashcardLoading] = useState(false);
 
-    // useEffect(() => {
-    //     setFlipped(flashcard?.questions.map(() => false));
-    // }, [flashcard]);
-
     useEffect(() => {
         const getData = async () => {
-            console.log("In getData");
-
             setFlashcardLoading(true);
-            const data: any = await getFlashcardByDocId(
-                currentUser.uid,
-                params.docId
-            );
-            console.log("Flashcard:", data);
-            if (!data) {
-                console.log("error loading flashcards");
-                return <> loading{params.docId}</>;
+            try {
+                const data: any = await getFlashcardByDocId(
+                    currentUser!.uid,
+                    params.docId
+                );
+                if (data) {
+                    setFlashcard(data);
+                    setFlipped(data.questions.map(() => false));
+                } else {
+                    console.error("Error loading flashcards");
+                }
+            } catch (error) {
+                console.error("Error fetching flashcard:", error);
+            } finally {
+                setFlashcardLoading(false);
             }
-            setFlashcard(data);
-            setFlashcardLoading(false);
         };
 
-        if (!isLoading && !currentUser) {
-            redirect("/login");
+        if (!isLoading) {
+            if (currentUser) {
+                getData();
+            } else {
+                redirect("/login");
+            }
         }
-
-        console.log(currentUser.uid);
-        getData();
-    }, []);
+    }, [currentUser, isLoading, params.docId]);
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -100,7 +95,7 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
     }, [flipped, currentIndex]);
 
     const handleNext = () => {
-        if (currentIndex < flashcard.questions.length - 1) {
+        if (currentIndex < flashcard!.questions.length - 1) {
             setFlipped((prevFlipped) =>
                 prevFlipped.map((flip, index) =>
                     index === currentIndex ? false : flip
@@ -127,159 +122,132 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
         );
     };
 
-    console.log(flashcard);
-    console.log(currentUser.uid);
-
-    if (flashcardLoading) {
-        return <>loading {params.docId}</>;
+    if (isLoading || flashcardLoading || !flashcard) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <LoaderCircle className="text-primary animate-spin" size={48} />
+            </div>
+        );
     }
 
     return (
-        <>
-            {/* <div>
-                <div>
-                    <h1>Flashcard Details</h1>
-                    <p>Title: {flashcard?.title}</p>
-                    <p>Description: {flashcard?.description}</p>
-                    <p>Created At: {flashcard?.created_at}</p>
-                    <div>
-                        {flashcard?.questions &&
-                        flashcard?.questions?.length > 0 ? (
-                            flashcard.questions.map((question, index) => (
-                                <div key={index}>
-                                    <p>
-                                        <strong>Front:</strong> {question.front}
-                                    </p>
-                                    <p>
-                                        <strong>Back:</strong> {question.back}
-                                    </p>
-                                </div>
-                            ))
-                        ) : (
-                            <p>No questions available.</p>
-                        )}
-                    </div>
-                </div>
-            </div> */}
-            <section className="container flex flex-col items-start gap-8 pt-8 px-8 md:px-20 sm:gap-10 min-h-screen mb-20">
-                <div className="flex flex-col gap-2 w-full">
-                    <div className="flex flex-row items-center justify-between">
-                        <h1 className="text-2xl font-bold md:text-3xl">
-                            {flashcard?.title}
-                        </h1>
-                        <div className="flex flex-row gap-4">
-                            <Button
-                                className="text-md font-semibold"
-                                size="default"
-                                variant="destructive"
-                            >
-                                Delete
-                            </Button>
-                        </div>
-                    </div>
-
-                    <p className="text-lg text-muted-foreground">
-                        {flashcard?.description} - {flashcard?.created_at}
-                    </p>
-                    <Badge className="text-sm mr-auto">
-                        {flashcard?.questions.length} Cards
-                    </Badge>
-                </div>
-
-                <div className="flex flex-row items-center justify-around w-full p-2">
-                    <h2
-                        className={`text-lg font-semibold cursor-pointer ${
-                            viewMode === "single" &&
-                            "text-primary border-b-2 border-primary"
-                        }`}
-                        onClick={() => {
-                            setViewMode("single");
-                            setCurrentIndex(0);
-                        }}
-                    >
-                        View Single Card
-                    </h2>
-                    <h2
-                        className={`text-lg font-semibold cursor-pointer ${
-                            viewMode === "all" &&
-                            "text-primary border-b-2 border-primary"
-                        }`}
-                        onClick={() => {
-                            setViewMode("all");
-                            setCurrentIndex(0);
-                            setFlipped(flashcard?.questions.map(() => false));
-                        }}
-                    >
-                        View All Cards
-                    </h2>
-                </div>
-
-                {viewMode === "single" ? (
-                    <div className="flex flex-row items-center justify-center gap-40 w-full">
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        onClick={handlePrev}
-                                        disabled={currentIndex === 0}
-                                    >
-                                        <ChevronLeft className="w-5 h-5" />
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Left Arrow</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-
-                        <Card
-                            className="relative w-full max-w-[300px] min-h-[400px] flex flex-col items-center justify-center p-6 cursor-pointer"
-                            onClick={() => handleFlip(currentIndex)}
+        <section className="container flex flex-col items-start gap-8 pt-8 px-8 md:px-20 sm:gap-10 min-h-screen mb-20">
+            <div className="flex flex-col gap-2 w-full">
+                <div className="flex flex-row items-center justify-between">
+                    <h1 className="text-2xl font-bold md:text-3xl">
+                        {flashcard?.title}
+                    </h1>
+                    <div className="flex flex-row gap-4">
+                        <Button
+                            className="text-md font-semibold"
+                            size="default"
+                            variant="destructive"
                         >
-                            <CardContent>
-                                <p className="absolute right-0 left-0 top-6 text-center text-sm font-semibold text-primary">
-                                    {currentIndex + 1}/
-                                    {flashcard?.questions.length}
-                                </p>
-                                <CardTitle className="text-center">
-                                    {flipped[currentIndex]
-                                        ? flashcard?.questions[currentIndex]
-                                              .back
-                                        : flashcard?.questions[currentIndex]
-                                              .front}
-                                </CardTitle>
-                                <p className="absolute bottom-8 right-0 left-0 text-center text-sm text-muted-foreground">
-                                    {flipped[currentIndex] ? "Back" : "Front"}
-                                </p>
-                            </CardContent>
-                        </Card>
-
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        onClick={handleNext}
-                                        disabled={
-                                            currentIndex ===
-                                            flashcard?.questions.length - 1
-                                        }
-                                    >
-                                        <ChevronRight className="w-5 h-5" />
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Right Arrow</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
+                            Delete
+                        </Button>
                     </div>
-                ) : (
-                    <div className="flex flex-wrap gap-4 justify-center">
-                        {flashcard?.questions.map((question, index) => (
+                </div>
+
+                <p className="text-md text-muted-foreground">
+                    {flashcard?.description}
+                </p>
+                <Badge className="text-sm mr-auto">
+                    {flashcard?.questions.length} Cards
+                </Badge>
+            </div>
+
+            <div className="flex flex-row items-center justify-around w-full p-2">
+                <h2
+                    className={`text-lg font-semibold cursor-pointer ${
+                        viewMode === "single" &&
+                        "text-primary border-b-2 border-primary"
+                    }`}
+                    onClick={() => {
+                        setViewMode("single");
+                        setCurrentIndex(0);
+                    }}
+                >
+                    Single Card
+                </h2>
+                <h2
+                    className={`text-lg font-semibold cursor-pointer ${
+                        viewMode === "all" &&
+                        "text-primary border-b-2 border-primary"
+                    }`}
+                    onClick={() => {
+                        setViewMode("all");
+                        setCurrentIndex(0);
+                        setFlipped(flashcard?.questions.map(() => false));
+                    }}
+                >
+                    All Cards
+                </h2>
+            </div>
+
+            {viewMode === "single" ? (
+                <div className="flex flex-row items-center justify-center gap-4 md:gap-16 lg:gap-32 w-full">
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={handlePrev}
+                                    disabled={currentIndex === 0}
+                                >
+                                    <ChevronLeft className="w-5 h-5" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Left Arrow</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+
+                    <Card
+                        className="relative w-full max-w-[300px] min-h-[400px] flex flex-col items-center justify-center p-6 cursor-pointer"
+                        onClick={() => handleFlip(currentIndex)}
+                    >
+                        <CardContent>
+                            <p className="absolute right-0 left-0 top-6 text-center text-sm font-semibold text-primary">
+                                {currentIndex + 1}/{flashcard?.questions.length}
+                            </p>
+                            <CardTitle className="text-center">
+                                {flipped[currentIndex]
+                                    ? flashcard?.questions[currentIndex].back
+                                    : flashcard?.questions[currentIndex].front}
+                            </CardTitle>
+                            <p className="absolute bottom-8 right-0 left-0 text-center text-sm text-muted-foreground">
+                                {flipped[currentIndex] ? "Back" : "Front"}
+                            </p>
+                        </CardContent>
+                    </Card>
+
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={handleNext}
+                                    disabled={
+                                        currentIndex ===
+                                        flashcard?.questions.length - 1
+                                    }
+                                >
+                                    <ChevronRight className="w-5 h-5" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Right Arrow</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </div>
+            ) : (
+                <div className="flex flex-wrap gap-4 justify-center">
+                    {flashcard?.questions.map(
+                        (question: Question, index: number) => (
                             <Card
                                 key={index}
                                 className="relative w-full max-w-[250px] min-h-[300px] flex flex-col items-center justify-center p-6 cursor-pointer"
@@ -300,10 +268,10 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
                                     </p>
                                 </CardContent>
                             </Card>
-                        ))}
-                    </div>
-                )}
-            </section>
-        </>
+                        )
+                    )}
+                </div>
+            )}
+        </section>
     );
 }
