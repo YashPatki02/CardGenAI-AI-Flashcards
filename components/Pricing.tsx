@@ -4,10 +4,12 @@ import { Button } from "./ui/button";
 import { Check } from "lucide-react";
 import getStripe from "@/utils/get-stripe";
 import { motion, useInView } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const Pricing = () => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
+    const router = useRouter();
 
     const cardVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -84,7 +86,7 @@ const Pricing = () => {
                                     </span>
                                     <span className="text-sm">/month</span>
                                 </div>
-                                <Button className="mt-8 w-full">
+                                <Button className="mt-8 w-full" onClick={() => router.push('/login')}>
                                     Get Started
                                 </Button>
                             </div>
