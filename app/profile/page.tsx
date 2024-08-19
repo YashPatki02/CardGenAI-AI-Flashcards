@@ -68,6 +68,7 @@ export const Profile = () => {
         firstName: firstName,
         lastName: lastName,
         dob: dob,
+        email: email,
       });
       console.log("saved data successfully");
     } catch (error) {
@@ -112,7 +113,6 @@ export const Profile = () => {
               value={email}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded mt-2"
-
             />
           </div>
           <div className="mb-4">
