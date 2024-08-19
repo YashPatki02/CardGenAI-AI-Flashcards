@@ -1,22 +1,24 @@
 "use client";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import Features from "@/components/Features";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { motion } from "framer-motion";
+import { motion, animate } from "framer-motion";
 
 const HeroColumns = () => {
     const goToFeatures = () => {
         const features = document.getElementById("features");
         if (features) {
-            features.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-                inline: "nearest",
+            const y = features.getBoundingClientRect().top + window.scrollY;
+
+            animate(window.scrollY, y, {
+                duration: 0.8, 
+                ease: [0.42, 0, 0.58, 1], 
+                onUpdate: (latest) => window.scrollTo(0, latest),
             });
         }
     };
@@ -25,26 +27,59 @@ const HeroColumns = () => {
         front: "Your new favorite study tool...",
         back: "CardGenAI!",
     };
-    const [side, setSide] = React.useState("front");
+
+    const variants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.2, 
+                ease: "easeIn",
+                duration: 0.5,
+            },
+        },
+    };
+
+    const childVariants = {
+        hidden: { opacity: 0, x: -40 },
+        visible: { opacity: 1, x: 0 },
+    };
 
     return (
         <>
             <section className="container flex flex-col lg:flex-row items-center gap-8 pt-20 ml-8 sm:gap-10">
-                <div className="flex flex-col items-center lg:items-start gap-8 lg:w-1/2">
-                    <Badge
-                        className="px-4 py-1 text-md gap-4"
-                        variant="secondary"
+                <motion.div
+                    className="flex flex-col items-center lg:items-start gap-8 lg:w-1/2"
+                    variants={variants}
+                    initial="hidden"
+                    animate="visible"
+                    
+                >
+                    <motion.div variants={childVariants}>
+                        <Badge
+                            className="px-4 py-1 text-md gap-4"
+                            variant="secondary"
+                        >
+                            Introducing CardGenAI <ArrowRight />
+                        </Badge>
+                    </motion.div>
+                    <motion.h1
+                        className="text-3xl font-heading font-semibold max-w-5xl text-center sm:text-5xl sm:leading-tight lg:text-left"
+                        variants={childVariants}
                     >
-                        Introducing CardGenAI <ArrowRight />
-                    </Badge>
-                    <h1 className="text-3xl font-heading font-semibold max-w-5xl text-center sm:text-5xl sm:leading-tight lg:text-left">
                         Your Personal AI-Study Tool to Prepare Flashcards
-                    </h1>
-                    <p className="text-center text-lg max-w-lg text-muted-foreground sm:text-xl lg:text-left">
+                    </motion.h1>
+                    <motion.p
+                        className="text-center text-lg max-w-lg text-muted-foreground sm:text-xl lg:text-left"
+                        variants={childVariants}
+                    >
                         Create Flashcards with ease and let the AI do the rest.
                         Study smarter, not harder.
-                    </p>
-                    <div className="flex flex-row items-center gap-4">
+                    </motion.p>
+                    <motion.div
+                        className="flex flex-row items-center gap-4"
+                        variants={childVariants}
+                    >
                         <Button
                             onClick={goToFeatures}
                             size="lg"
@@ -55,8 +90,8 @@ const HeroColumns = () => {
                         <Button size="lg">
                             <Link href="/login">Get Started</Link>
                         </Button>
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
                 <div className="flex items-center justify-center sm:mt-8 mb-4 lg:w-1/2">
                     <motion.div
                         className="z-10"
