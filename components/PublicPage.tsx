@@ -1,7 +1,34 @@
-import React from "react";
+
+import { useAuth } from "@/context/AuthContext";
+import { getFlashcardsForAllUsers } from "@/lib/firebaseUtils";
+import { error } from "console";
+import { LoaderCircle } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import FlashcardDeck from "./FlashcardDeck";
 
 const PublicPage = () => {
+  const { currentUser, isLoading } = useAuth();
+  const [publicFlashcard, setPublicFlashcard] = useState();
+  useEffect(() => {
+    async function getPublicFlashcard() {
+      try {
+        const data:any = await getFlashcardsForAllUsers();
+        if(data!==[]){
+          setPublicFlashcard(data)
+          console.log("successfully added")
+          console.log(data)
+        }
+        else{
+          throw Error("data is empty")
+        }
+      } catch (error) {
+        console.log("unable to get data")
+        console.log(error)
+      }
+    }
+    getPublicFlashcard();
+  }, []);
+
     const flashcards = [
         {
             id: "1",
@@ -39,7 +66,13 @@ const PublicPage = () => {
             created_at: "2022-01-01",
         },
     ];
-
+if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen pb-20">
+        <LoaderCircle size={48} className="animate-spin text-primary" />
+      </div>
+    );
+  } 
     return (
         <section className="container flex flex-col items-start gap-8 pt-8 px-8 md:px-20 sm:gap-10 min-h-screen">
             <h1 className="text-xl font-semibold sm:text-2xl">
