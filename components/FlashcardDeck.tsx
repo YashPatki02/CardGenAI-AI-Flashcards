@@ -1,10 +1,10 @@
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,21 +12,21 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 
 interface FlashcardDeckProps {
-  title: string;
+    title: string;
     numberCards: number;
-  description: string;
-  creator: string;
-  createdAt: string;
-  docID: string;
+    description: string;
+    creator: string;
+    createdAt: string;
+    docID: string;
 }
 
 const FlashcardDeckCard = ({
-  title,
+    title,
     numberCards,
-  description,
-  creator,
-  createdAt,
-  docID,
+    description,
+    creator,
+    createdAt,
+    docID,
 }: FlashcardDeckProps) => {
     return (
         <Card className="w-full hover:shadow-md">
@@ -46,11 +46,13 @@ const FlashcardDeckCard = ({
                 </div>
             </CardContent>
             <CardFooter className="flex justify-end">
-                <Button variant="outline">View Deck</Button>
+                {/* <Button variant="outline">View Deck</Button> */}
+                <Link href={`/flashcards/${docID}`} passHref>
+                    <Button variant="outline">View Deck</Button>
+                </Link>
             </CardFooter>
         </Card>
     );
 };
 
 export default FlashcardDeckCard;
-
