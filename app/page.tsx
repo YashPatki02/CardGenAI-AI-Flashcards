@@ -16,7 +16,7 @@ export default function Home() {
 
     if (isLoading) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-screen">
+            <div className="flex flex-col items-center justify-center min-h-screen pb-20">
                 <LoaderCircle size={48} className="animate-spin text-primary" />
             </div>
         );
@@ -28,7 +28,7 @@ export default function Home() {
                 )}
                 {!currentUser && (
                     <div className="flex flex-col items-center justify-start min-h-screen">
-                        <Hero />
+                        <HeroColumns />
                         <Pricing />
                         <Testimonials />
                         <FAQ />

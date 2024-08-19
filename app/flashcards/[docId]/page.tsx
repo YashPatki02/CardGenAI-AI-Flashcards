@@ -13,6 +13,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Link from "next/link";
 
 export default function Flashcard({ params }: { params: { docId: string } }) {
     interface Question {
@@ -122,13 +123,26 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
         );
     };
 
-    if (isLoading || flashcardLoading || !flashcard) {
+    if (isLoading || flashcardLoading) {
         return (
             <div className="flex justify-center items-center h-screen">
                 <LoaderCircle
                     className="text-primary animate-spin mb-20"
                     size={48}
                 />
+            </div>
+        );
+    }
+
+    if (!flashcard) {
+        return (
+            <div className="flex flex-col pb-20 justify-center items-center h-screen">
+                <h1 className="text-2xl font-semibold">
+                    Flashcard doesn't exist.
+                </h1>
+                <Link href="/flashcards">
+                    <Button className="mt-4">Go Back</Button>
+                </Link>
             </div>
         );
     }
