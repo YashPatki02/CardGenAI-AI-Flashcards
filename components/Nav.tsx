@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { NotepadTextDashed, Menu, LucideLogOut } from "lucide-react";
 import Logout from "./Logout";
@@ -15,10 +15,37 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { redirect, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getUserById } from "@/lib/firebaseUtils";
 
 const Nav = () => {
     const { currentUser, isLoading, logout } = useAuth();
     const router = useRouter();
+
+    const [userData, setUserData] = useState<any | null>(null);
+
+    useEffect(() => {
+        const getUserData = async () => {
+            if (currentUser) {
+                try {
+                    const data = await getUserById(currentUser?.uid);
+                    if (data) {
+                        console.log(data);
+                        setUserData(data);
+                    } else {
+                        console.log("No user data found");
+                        setUserData(null);
+                    }
+                } catch (error) {
+                    console.error("Error loading user data:");
+                }
+            }
+        };
+
+        if (currentUser) {
+            getUserData();
+        }
+    }, [currentUser]);
+
     return (
         <header className="flex flex-row w-full items-center justify-between px-12 py-4 shadow-md">
             <Link href="/" className="flex flex-row gap-2 items-center">
@@ -44,11 +71,11 @@ const Nav = () => {
                     <DropdownMenu>
                         <DropdownMenuTrigger>
                             <Avatar>
-                                <AvatarImage
-                                    src="https://github.com/shadcn.png"
-                                    alt="@shadcn"
-                                />
-                                <AvatarFallback>CN</AvatarFallback>
+                                <AvatarImage src="" alt="@shadcn" />
+                                <AvatarFallback>
+                                    {userData?.firstName[0] +
+                                        userData?.lastName[0]}
+                                </AvatarFallback>
                             </Avatar>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
@@ -59,8 +86,16 @@ const Nav = () => {
                         >
                             <DropdownMenuLabel>My Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={()=> router.push('/profile')}>Profile</DropdownMenuItem>
-                            <DropdownMenuItem onClick={()=> router.push('/billing')}>Billing</DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => router.push("/profile")}
+                            >
+                                Profile
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => router.push("/billing")}
+                            >
+                                Billing
+                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={logout}>
                                 <LucideLogOut size={15} className="mr-2" />
