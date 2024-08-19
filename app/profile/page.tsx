@@ -1,150 +1,163 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+} from "@/components/ui/card";
 import { useAuth } from "@/context/AuthContext";
 import { getUserById, registerUser } from "@/lib/firebaseUtils";
 import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export const Profile = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [dob, setDob] = useState("");
-  //   const [profilePicture, setProfilePicture] = useState(null);
-  //! checking for user
-  const { isLoading, currentUser } = useAuth();
-  useEffect(() => {
-    const getData = async () => {
-      // check if we have the data
-      try {
-        const data = await getUserById(currentUser.uid);
-        console.log(data);
-        setFirstName(data?.firstName || "");
-        setLastName(data?.lastName || "");
-        setEmail(data?.email || "");
-        setDob(data?.dob || "");
-      } catch (err) {
-        console.log(err);
-      }
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [dob, setDob] = useState("");
+
+    const { isLoading, currentUser } = useAuth();
+
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const data = await getUserById(currentUser.uid);
+                console.log(data);
+                setFirstName(data?.firstName || "");
+                setLastName(data?.lastName || "");
+                setEmail(data?.email || "");
+                setDob(data?.dob || "");
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        if (isLoading && !currentUser) {
+            console.log("no current users");
+            return redirect("/login");
+        }
+        getData();
+    }, [currentUser, isLoading]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        if (name === "firstName") {
+            setFirstName(value);
+        } else if (name === "lastName") {
+            setLastName(value);
+        } else if (name === "email") {
+            setEmail(value);
+        } else if (name === "dob") {
+            setDob(value);
+        }
     };
-    if (isLoading && !currentUser) {
-      console.log("no current users");
-      return redirect("/login");
-    }
-    getData();
-  }, []);
-  const handleChange = (e: { target: { name: any; value: any; files: any; }; }) => {
-    const { name, value, files } = e.target;
-    if (name === "firstName") {
-      setFirstName(value);
-    } else if (name === "lastName") {
-      setLastName(value);
-    } else if (name === "email") {
-      setEmail(value);
-    } else if (name === "dob") {
-      setDob(value);
-    }
-    // else if (name === "profilePicture") {
-    //   setProfilePicture(files[0]);
-    // }
-  };
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    console.log("Form submitted with:", {
-      firstName,
-      lastName,
-      email,
-      dob,
-      //   profilePicture,
-    });
-    if (!firstName || !lastName || !email || !dob) {
-      console.log("All fields are required.");
-      return;
-    }
-    try {
-      await registerUser(currentUser.uid, {
-        firstName: firstName,
-        lastName: lastName,
-        dob: dob,
-        email: email,
-      });
-      console.log("saved data successfully");
-    } catch (error) {
-      console.log("error saving profile data", error);
-    }
-  };
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log("Form submitted with:", {
+            firstName,
+            lastName,
+            email,
+            dob,
+        });
+        if (!firstName || !lastName || !email || !dob) {
+            console.log("All fields are required.");
+            return;
+        }
+        try {
+            await registerUser(currentUser.uid, {
+                firstName,
+                lastName,
+                email,
+                dob,
+            });
+            console.log("Saved data successfully");
+        } catch (error) {
+            console.log("Error saving profile data", error);
+        }
+    };
 
-  return (
-    <Card className="flex justify-center items-center h-screen">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-semibold mb-6 text-center">
-          Create Your User Profile
-        </h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700">First Name</label>
-            <input
-              type="text"
-              name="firstName"
-              value={firstName}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded mt-2"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Last Name</label>
-            <input
-              type="text"
-              name="lastName"
-              value={lastName}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded mt-2"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Email Address</label>
-            <input
-              type="email"
-              name="email"
-              value={email}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded mt-2"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Date of Birth</label>
-            <input
-              type="date"
-              name="dob"
-              value={dob}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded mt-2"
-              required
-              min="1900-01-01"
-              max={new Date().toISOString().split("T")[0]}
-            />
-          </div>
-          <div className="mb-4">
-            {/* <label className="block text-gray-700">Profile Picture</label>
-            <input
-              type="file"
-              name="profilePicture"
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded mt-2"
-              accept="image/*"
-            /> */}
-          </div>
-          <Button type="submit" className="w-full">
-            Submit
-          </Button>
-        </form>
-      </div>
-    </Card>
-  );
+    return (
+        <div className="flex justify-center items-center h-screen mb-20">
+            <Card className="w-full max-w-md">
+                <CardHeader>
+                    <CardTitle>Update Your User Profile</CardTitle>
+                    <CardDescription>
+                        Fill out the form below to create your profile.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <form onSubmit={handleSubmit}>
+                        <div className="flex flex-col gap-4">
+                            <div className="flex flex-col">
+                                <Label htmlFor="firstName">First Name</Label>
+                                <Input
+                                    type="text"
+                                    id="firstName"
+                                    name="firstName"
+                                    placeholder="First Name"
+                                    value={firstName}
+                                    onChange={handleChange}
+                                    className="mt-2"
+                                    required
+                                />
+                            </div>
+                            <div className="flex flex-col">
+                                <Label htmlFor="lastName">Last Name</Label>
+                                <Input
+                                    type="text"
+                                    id="lastName"
+                                    name="lastName"
+                                    value={lastName}
+                                    onChange={handleChange}
+                                    className="mt-2"
+                                    required
+                                />
+                            </div>
+                            <div className="flex flex-col">
+                                <Label htmlFor="email">Email Address</Label>
+                                <Input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    value={email}
+                                    onChange={handleChange}
+                                    className="mt-2"
+                                />
+                            </div>
+                            <div className="flex flex-col">
+                                <Label htmlFor="dob">Date of Birth</Label>
+                                <Input
+                                    type="date"
+                                    id="dob"
+                                    name="dob"
+                                    value={dob}
+                                    onChange={handleChange}
+                                    className="mt-2"
+                                    required
+                                    min="1900-01-01"
+                                    max={new Date().toISOString().split("T")[0]}
+                                />
+                            </div>
+                        </div>
+                    </form>
+                </CardContent>
+                <CardFooter className="flex justify-center">
+                    <Button
+                        type="submit"
+                        onClick={handleSubmit}
+                        className="w-full"
+                    >
+                        Submit
+                    </Button>
+                </CardFooter>
+            </Card>
+        </div>
+    );
 };
 
 export default Profile;

@@ -9,6 +9,12 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
     title: "CardGenAI",
     description: "AI-powered Flashcards for Students",
+    icons: [
+        {
+            url: "/favicon.ico",
+            rel: "icon",
+        },
+    ],
 };
 
 export default function RootLayout({
