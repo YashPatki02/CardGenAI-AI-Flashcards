@@ -30,7 +30,7 @@ const Register = () => {
 
         try {
             await signup(email, password);
-            router.push("/flashcards");
+            router.push("/profile");
         } catch (err: any) {
             setError(
                 err.message || "An unexpected error occurred. Please try again."

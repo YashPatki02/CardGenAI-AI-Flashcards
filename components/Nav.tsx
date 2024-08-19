@@ -13,12 +13,12 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/context/AuthContext";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Nav = () => {
     const { currentUser, isLoading, logout } = useAuth();
-
+    const router = useRouter();
     return (
         <header className="flex flex-row w-full items-center justify-between px-12 py-4 shadow-md">
             <Link href="/" className="flex flex-row gap-2 items-center">
@@ -59,8 +59,8 @@ const Nav = () => {
                         >
                             <DropdownMenuLabel>My Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Profile</DropdownMenuItem>
-                            <DropdownMenuItem>Billing</DropdownMenuItem>
+                            <DropdownMenuItem onClick={()=> router.push('/profile')}>Profile</DropdownMenuItem>
+                            <DropdownMenuItem onClick={()=> router.push('/billing')}>Billing</DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={logout}>
                                 <LucideLogOut size={15} className="mr-2" />
