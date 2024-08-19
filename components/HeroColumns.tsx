@@ -16,8 +16,8 @@ const HeroColumns = () => {
             const y = features.getBoundingClientRect().top + window.scrollY;
 
             animate(window.scrollY, y, {
-                duration: 0.8, 
-                ease: [0.42, 0, 0.58, 1], 
+                duration: 0.8,
+                ease: [0.42, 0, 0.58, 1],
                 onUpdate: (latest) => window.scrollTo(0, latest),
             });
         }
@@ -33,7 +33,7 @@ const HeroColumns = () => {
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.2, 
+                staggerChildren: 0.2,
                 ease: "easeIn",
                 duration: 0.5,
             },
@@ -53,7 +53,6 @@ const HeroColumns = () => {
                     variants={variants}
                     initial="hidden"
                     animate="visible"
-                    
                 >
                     <motion.div variants={childVariants}>
                         <Badge
@@ -92,7 +91,12 @@ const HeroColumns = () => {
                         </Button>
                     </motion.div>
                 </motion.div>
-                <div className="flex items-center justify-center sm:mt-8 mb-4 lg:w-1/2">
+                <motion.div
+                    className="flex items-center justify-center sm:mt-8 mb-4 lg:w-1/2"
+                    variants={variants}
+                    initial="hidden"
+                    animate="visible"
+                >
                     <motion.div
                         className="z-10"
                         whileHover={{ x: 40, y: -10, rotate: 3, zIndex: 0 }}
@@ -146,7 +150,7 @@ const HeroColumns = () => {
                             </CardContent>
                         </Card>
                     </motion.div>
-                </div>
+                </motion.div>
             </section>
             <Features />
         </>
