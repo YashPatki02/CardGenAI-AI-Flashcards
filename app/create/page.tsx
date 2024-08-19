@@ -14,12 +14,12 @@ import { cn } from "@/lib/utils";
 import ManualFlashcards from "@/components/ManualFlashcards";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import UploadFile from "@/components/UploadFile";
+import Generate from "@/components/Generate";
+import ManualEntry from "@/components/ManualEntry";
 
 const Create = () => {
     const [selected, setSelected] = useState("manual");
-    const [cards, setCards] = useState<{ front: string; back: string }[]>([
-        { front: "", back: "" },
-    ]);
 
     const tabs = [
         { id: "manual", label: "Manual Entry" },
@@ -49,92 +49,9 @@ const Create = () => {
                     </div>
                 ))}
             </div>
-            {selected === "manual" && (
-                <Card className="w-full mb-20">
-                    <CardHeader>
-                        <CardTitle>Manual Entry</CardTitle>
-                        <CardDescription>
-                            Enter the front and back of the flashcard
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <form className="flex flex-col gap-4">
-                            <Label htmlFor="topic">Topic</Label>
-                            <Input id="topic" type="text" placeholder="Topic" />
-                            <Label htmlFor="number">Description</Label>
-                            <Input
-                                id="description"
-                                type="text"
-                                placeholder="Description"
-                            />
-                        </form>
-                        <ManualFlashcards cards={cards} setCards={setCards} />
-                        <Separator className="my-4" />
-                        <Button
-                            onClick={() => console.log(cards)}
-                            className="w-full"
-                        >
-                            Generate Cards
-                        </Button>
-                    </CardContent>
-                </Card>
-            )}
-            {selected === "aigen" && (
-                <Card className="w-full">
-                    <CardHeader>
-                        <CardTitle>AI Generated</CardTitle>
-                        <CardDescription>
-                            Type in a topic to generate flashcards with AI
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <form className="flex flex-col gap-4">
-                            <Label htmlFor="topic">Topic</Label>
-                            <Input id="topic" type="text" placeholder="Topic" />
-                            <Label htmlFor="number">Number of cards</Label>
-                            <Input
-                                id="number"
-                                type="number"
-                                placeholder="Number of cards"
-                                min="1"
-                                max="15"
-                            />
-                            <Button type="submit">Generate Cards</Button>
-                        </form>
-                    </CardContent>
-                </Card>
-            )}
-            {selected === "upload" && (
-                <Card className="w-full relative">
-                    <Badge className="bg-primary text-white p-2 rounded-md absolute -right-3 -top-3">
-                        Coming Soon
-                    </Badge>
-                    <CardHeader>
-                        <CardTitle>Upload File</CardTitle>
-                        <CardDescription>
-                            Upload a PDF File with content to generate
-                            flashcards
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <form className="flex flex-col gap-4">
-                            <Label htmlFor="file" className="hidden">
-                                Choose a file
-                            </Label>
-                            <Input id="file" type="file" className="" />
-                            <Label htmlFor="number">Number of cards</Label>
-                            <Input
-                                id="number"
-                                type="number"
-                                placeholder="Number of cards"
-                                min="1"
-                                max="15"
-                            />
-                            <Button type="submit">Generate Cards</Button>
-                        </form>
-                    </CardContent>
-                </Card>
-            )}
+            {selected === "manual" && <ManualEntry />}
+            {selected === "aigen" && <Generate />}
+            {selected === "upload" && <UploadFile />}
             {selected === "youtube" && (
                 <Card className="w-full relative">
                     <Badge className="bg-primary text-white p-2 rounded-md absolute -right-3 -top-3">

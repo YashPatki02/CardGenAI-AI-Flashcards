@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getFlashcardsByUserId } from "@/lib/firebaseUtils";
 import Link from "next/link";
+import {LoaderCircle} from "lucide-react";
 
 interface FlashcardDeckProps {
     id: string;
@@ -27,30 +28,48 @@ const Flashcards = () => {
     const { isLoading, currentUser } = useAuth();
     const router = useRouter();
 
-    //   !
     const [flashcards, setFlashcards] = useState<FlashcardDeckProps[]>([]);
+    const [flashcardLoading, setFlashcardLoading] = useState(false);
+
     useEffect(() => {
         const getData = async () => {
-            // const id = "eKlEoznoXBbABrBN4tjIf7ycECu1"; // Replace with dynamic ID if necessary
-            const id = currentUser.uid;
-            //   const id = currentUser.uid;
+            setFlashcardLoading(true);
+
             try {
-                const data = await getFlashcardsByUserId(id);
-                console.log("Flashcards:", data);
-                setFlashcards(data);
-                // Handle flashcards data
+                const data = await getFlashcardsByUserId(currentUser?.uid);
+                if (data) {
+                    setFlashcards(data);
+                } else {
+                    console.log("No flashcards found");
+                    setFlashcards([]);
+                }
             } catch (error) {
                 console.error("Error loading flashcards:");
+            } finally {
+                setFlashcardLoading(false);
             }
         };
-        if (isLoading && !currentUser) {
-            //
-            console.log("no current users");
-            //
-            return redirect("/login");
+
+        if (!isLoading) {
+            if (currentUser) {
+                getData();
+            } else {
+                console.log("no current users");
+                return redirect("/login");
+            }
         }
-        getData();
-    }, []);
+    }, [currentUser, isLoading]);
+
+    if (isLoading || flashcardLoading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <LoaderCircle
+                    className="text-primary animate-spin mb-20"
+                    size={48}
+                />
+            </div>
+        );
+    }
 
     return (
         <section className="container flex flex-col items-start gap-8 pt-8 px-8 md:px-20 sm:gap-10 min-h-screen">

@@ -125,7 +125,10 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
     if (isLoading || flashcardLoading || !flashcard) {
         return (
             <div className="flex justify-center items-center h-screen">
-                <LoaderCircle className="text-primary animate-spin" size={48} />
+                <LoaderCircle
+                    className="text-primary animate-spin mb-20"
+                    size={48}
+                />
             </div>
         );
     }
@@ -158,7 +161,7 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
 
             <div className="flex flex-row items-center justify-around w-full p-2">
                 <h2
-                    className={`text-lg font-semibold cursor-pointer ${
+                    className={`text-xl font-semibold cursor-pointer hover:text-primary ${
                         viewMode === "single" &&
                         "text-primary border-b-2 border-primary"
                     }`}
@@ -170,7 +173,7 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
                     Single Card
                 </h2>
                 <h2
-                    className={`text-lg font-semibold cursor-pointer ${
+                    className={`text-xl font-semibold cursor-pointer hover:text-primary ${
                         viewMode === "all" &&
                         "text-primary border-b-2 border-primary"
                     }`}
@@ -205,19 +208,19 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
                     </TooltipProvider>
 
                     <Card
-                        className="relative w-full max-w-[300px] min-h-[400px] flex flex-col items-center justify-center p-6 cursor-pointer"
+                        className="relative w-full max-w-[300px] min-h-[400px] flex flex-col items-center justify-center py-6 px-2 cursor-pointer"
                         onClick={() => handleFlip(currentIndex)}
                     >
                         <CardContent>
-                            <p className="absolute right-0 left-0 top-6 text-center text-sm font-semibold text-primary">
+                            <p className="absolute right-0 left-0 top-4 text-center text-sm font-semibold text-primary">
                                 {currentIndex + 1}/{flashcard?.questions.length}
                             </p>
-                            <CardTitle className="text-center">
+                            <CardTitle className="text-center text-md leading-tight md:text-xl md:font-semibold text-wrap">
                                 {flipped[currentIndex]
                                     ? flashcard?.questions[currentIndex].back
                                     : flashcard?.questions[currentIndex].front}
                             </CardTitle>
-                            <p className="absolute bottom-8 right-0 left-0 text-center text-sm text-muted-foreground">
+                            <p className="absolute bottom-6 right-0 left-0 text-center text-sm text-muted-foreground">
                                 {flipped[currentIndex] ? "Back" : "Front"}
                             </p>
                         </CardContent>
@@ -245,31 +248,33 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
                     </TooltipProvider>
                 </div>
             ) : (
-                <div className="flex flex-wrap gap-4 justify-center">
-                    {flashcard?.questions.map(
-                        (question: Question, index: number) => (
-                            <Card
-                                key={index}
-                                className="relative w-full max-w-[250px] min-h-[300px] flex flex-col items-center justify-center p-6 cursor-pointer"
-                                onClick={() => handleFlip(index)}
-                            >
-                                <CardContent>
-                                    <p className="absolute right-0 left-0 top-6 text-center text-sm font-semibold text-primary">
-                                        {index + 1}/
-                                        {flashcard?.questions.length}
-                                    </p>
-                                    <CardTitle className="text-center">
-                                        {flipped[index]
-                                            ? question.back
-                                            : question.front}
-                                    </CardTitle>
-                                    <p className="absolute bottom-8 right-0 left-0 text-center text-sm text-muted-foreground">
-                                        {flipped[index] ? "Back" : "Front"}
-                                    </p>
-                                </CardContent>
-                            </Card>
-                        )
-                    )}
+                <div className="flex flex-row items-center justify-center w-full">
+                    <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        {flashcard?.questions.map(
+                            (question: Question, index: number) => (
+                                <Card
+                                    key={index}
+                                    className="relative min-w-[280px] min-h-[400px] flex flex-row items-center justify-center px-6 cursor-pointer"
+                                    onClick={() => handleFlip(index)}
+                                >
+                                    <CardContent>
+                                        <p className="absolute right-0 left-0 top-6 text-center text-sm font-semibold text-primary">
+                                            {index + 1}/
+                                            {flashcard?.questions.length}
+                                        </p>
+                                        <CardTitle className="text-center text-md text-wrap">
+                                            {flipped[index]
+                                                ? question.back
+                                                : question.front}
+                                        </CardTitle>
+                                        <p className="absolute bottom-8 right-0 left-0 text-center text-sm text-muted-foreground">
+                                            {flipped[index] ? "Back" : "Front"}
+                                        </p>
+                                    </CardContent>
+                                </Card>
+                            )
+                        )}
+                    </div>
                 </div>
             )}
         </section>

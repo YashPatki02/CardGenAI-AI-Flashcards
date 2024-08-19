@@ -18,9 +18,14 @@ interface ManualFlashcardsProps {
     setCards: React.Dispatch<
         React.SetStateAction<{ front: string; back: string }[]>
     >;
+    allowAdd: boolean;
 }
 
-const ManualFlashcards = ({ cards, setCards }: ManualFlashcardsProps) => {
+const ManualFlashcards = ({
+    cards,
+    setCards,
+    allowAdd,
+}: ManualFlashcardsProps) => {
     const [front, setFront] = useState("");
     const [back, setBack] = useState("");
 
@@ -76,15 +81,18 @@ const ManualFlashcards = ({ cards, setCards }: ManualFlashcardsProps) => {
                                     updatedCards[index].back = e.target.value;
                                     setCards(updatedCards);
                                 }}
+                                maxLength={140}
                             />
                         </div>
                     </div>
                 ))}
-                <div className="flex gap-4 mx-auto">
-                    <Button onClick={addCard}>
-                        <Plus size={18} className="mr-2" /> Add Card
-                    </Button>
-                </div>
+                {allowAdd && (
+                    <div className="flex gap-4 mx-auto">
+                        <Button onClick={addCard}>
+                            <Plus size={18} className="mr-2" /> Add Card
+                        </Button>
+                    </div>
+                )}
             </form>
         </>
     );
