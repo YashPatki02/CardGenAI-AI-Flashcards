@@ -34,7 +34,7 @@ export const Profile = () => {
     }
     getData();
   }, []);
-  const handleChange = (e) => {
+  const handleChange = (e: { target: { name: any; value: any; files: any; }; }) => {
     const { name, value, files } = e.target;
     if (name === "firstName") {
       setFirstName(value);
