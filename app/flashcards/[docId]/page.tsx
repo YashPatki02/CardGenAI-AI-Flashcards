@@ -278,7 +278,7 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
                 </div>
             ) : (
                 <div className="flex flex-row items-center justify-center w-full">
-                    <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {flashcard?.questions.map(
                             (question: Question, index: number) => (
                                 <Card
