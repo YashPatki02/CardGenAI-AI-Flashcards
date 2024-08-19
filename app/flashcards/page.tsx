@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import FlashcardDeck from "@/components/FlashcardDeck";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getFlashcardsByUserId } from "@/lib/firebaseUtils";
+import { getFlashcardsByUserId, getUserById } from "@/lib/firebaseUtils";
 import Link from "next/link";
 import {LoaderCircle} from "lucide-react";
 
@@ -30,6 +30,8 @@ const Flashcards = () => {
 
     const [flashcards, setFlashcards] = useState<FlashcardDeckProps[]>([]);
     const [flashcardLoading, setFlashcardLoading] = useState(false);
+
+    const [userData, setUserData] = useState<any | null>(null);
 
     useEffect(() => {
         const getData = async () => {
@@ -59,6 +61,29 @@ const Flashcards = () => {
             }
         }
     }, [currentUser, isLoading]);
+
+    useEffect(() => {
+        const getUserData = async () => {
+            if (currentUser) {
+                try {
+                    const data = await getUserById(currentUser?.uid);
+                    if (data) {
+                        console.log(data)
+                        setUserData(data);
+                    } else {
+                        console.log("No user data found");
+                        setUserData(null);
+                    }
+                } catch (error) {
+                    console.error("Error loading user data:");
+                }
+            }
+        };
+
+        if (currentUser) {
+            getUserData();
+        }
+    }, [currentUser]);
 
     if (isLoading || flashcardLoading) {
         return (
@@ -90,15 +115,15 @@ const Flashcards = () => {
                             title={flashcard?.title}
                             description={flashcard?.description}
                             numberCards={flashcard?.questions.length}
-                            creator="John Doe" //! Replace or remove as needed
+                            creator={userData?.firstName + " " + userData?.lastName}
                             createdAt={flashcard?.created_at}
                             docID={flashcard?.id}
                         />
                     ))}
                 </div>
             ) : (
-                <div>
-                    Create new flashcard by clicking create flashcard button
+                <div className="w-full flex items-start justify-center font-semibold text-2xl h-screen mt-20">
+                    No Flashcard Decks Found, Create One Now!
                 </div>
             )}
         </section>
