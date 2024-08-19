@@ -68,6 +68,7 @@ const ManualFlashcards = ({
                                     updatedCards[index].front = e.target.value;
                                     setCards(updatedCards);
                                 }}
+                                required
                             />
                         </div>
                         <div className="w-1/2">
@@ -83,6 +84,7 @@ const ManualFlashcards = ({
                                     setCards(updatedCards);
                                 }}
                                 maxLength={140}
+                                required
                             />
                         </div>
                         <Button
