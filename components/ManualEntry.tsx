@@ -85,22 +85,28 @@ const ManualEntry = () => {
             </CardHeader>
             <CardContent>
                 <form className="flex flex-col gap-4">
-                    <Label htmlFor="title">Title</Label>
-                    <Input
-                        id="title"
-                        type="text"
-                        placeholder="Title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                    <Label htmlFor="description">Description</Label>
-                    <Input
-                        id="description"
-                        type="text"
-                        placeholder="Description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
+                    <div>
+                        <Label htmlFor="title">Title</Label>
+                        <Input
+                            id="title"
+                            type="text"
+                            placeholder="Title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="description">Description</Label>
+                        <Input
+                            id="description"
+                            type="text"
+                            placeholder="Description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            required
+                        />
+                    </div>
                 </form>
                 <ManualFlashcards
                     cards={cards}
@@ -110,7 +116,7 @@ const ManualEntry = () => {
                 <div className="flex flex-row gap-2 mt-2">
                     <Checkbox
                         id="private"
-                        onCheckedChange={() => setPrivateDeck(!privateDeck)}    
+                        onCheckedChange={() => setPrivateDeck(!privateDeck)}
                         checked={privateDeck}
                     />
                     <Label htmlFor="private" className="text-sm">

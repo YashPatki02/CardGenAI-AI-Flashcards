@@ -184,6 +184,7 @@ export default function Generate() {
                                     onChange={(e) =>
                                         setDescription(e.target.value)
                                     }
+                                    required
                                 />
                             </div>
                         </div>

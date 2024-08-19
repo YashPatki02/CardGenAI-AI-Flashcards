@@ -20,7 +20,7 @@ interface FlashcardDeckProps {
     docID: string;
 }
 
-const FlashcardDeckCard = ({
+const FlashcardDeck = ({
     title,
     numberCards,
     description,
@@ -55,4 +55,4 @@ const FlashcardDeckCard = ({
     );
 };
 
-export default FlashcardDeckCard;
+export default FlashcardDeck;
