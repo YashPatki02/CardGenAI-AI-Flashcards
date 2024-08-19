@@ -30,9 +30,9 @@ const FlashcardDeck = ({
 }: FlashcardDeckProps) => {
     return (
         <Card className="w-full hover:shadow-md">
-            <CardHeader>
-                <CardTitle>{title}</CardTitle>
-                <CardDescription>{description}</CardDescription>
+            <CardHeader className="flex flex-col gap-1">
+                <CardTitle className="font-semibold text-lg">{title}</CardTitle>
+                <CardDescription className="text-sm leading-4 text-muted-foreground">{description}</CardDescription>
                 <Badge className="text-sm mr-auto">{numberCards} Cards</Badge>
             </CardHeader>
             <CardContent className="flex flex-row items-start justify-start gap-2">
@@ -48,7 +48,7 @@ const FlashcardDeck = ({
             <CardFooter className="flex justify-end">
                 {/* <Button variant="outline">View Deck</Button> */}
                 <Link href={`/flashcards/${docID}`} passHref>
-                    <Button variant="outline">View Deck</Button>
+                    <Button>View</Button>
                 </Link>
             </CardFooter>
         </Card>
