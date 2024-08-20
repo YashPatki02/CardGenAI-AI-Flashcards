@@ -45,7 +45,15 @@ const Nav = () => {
             getUserData();
         }
     }, [currentUser]);
-
+    // ! for logout 
+    const handleLogout=()=>{
+        try{
+            logout();
+            router.push('/')
+        }catch(err){
+            console.log("logout err navbar", err)
+        }
+    }
     return (
         <header className="flex flex-row w-full items-center justify-between px-12 py-4 shadow-md">
             <Link href="/" className="flex flex-row gap-2 items-center">
@@ -97,7 +105,7 @@ const Nav = () => {
                                 Billing
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={logout}>
+                            <DropdownMenuItem onClick={handleLogout}>
                                 <LucideLogOut size={15} className="mr-2" />
                                 Logout
                             </DropdownMenuItem>

@@ -11,8 +11,8 @@ import FlashcardDeck from "./FlashcardDeck";
 
 const PublicPage = () => {
   const { currentUser, isLoading } = useAuth();
-  const [publicFlashcard, setPublicFlashcard] = useState();
-  const [flashcards, setFlashcards] = useState([]);
+  const [publicFlashcards, setPublicFlashcards] = useState<any>([]);
+  const [flashcards, setFlashcards] = useState<any>([]);
   const [userData, setUserData] = useState<any | null>(null);
   // *
   useEffect(() => {
@@ -20,7 +20,7 @@ const PublicPage = () => {
       try {
         const data: any = await getFlashcardsForAllUsers(currentUser.uid);
         if (data !== []) {
-          setPublicFlashcard(data);
+          setPublicFlashcards(data);
           console.log("successfully added");
           console.log(data);
         } else {
@@ -39,7 +39,7 @@ const PublicPage = () => {
         if (data) {
           setFlashcards(data.slice(0,3));
           console.log("successfully retrive user flashcard");
-          console.log(data);
+          // console.log(data);
         } else {
           throw Error("data is empty");
         }
@@ -53,7 +53,7 @@ const PublicPage = () => {
         try {
           const data = await getUserById(currentUser?.uid);
           if (data) {
-            console.log(data);
+            // console.log(data);
             setUserData(data);
           } else {
             console.log("No user data found");
@@ -71,42 +71,6 @@ const PublicPage = () => {
     }
   }, [currentUser]);
 
-  /* const flashcards = [
-    {
-      id: "1",
-      title: "Spanish Vocabulary",
-      description: "A deck of flashcards to help you learn Spanish vocabulary",
-      questions: [
-        {
-          front: "Hola",
-          back: "Hello",
-        },
-        {
-          front: "Adios",
-          back: "Goodbye",
-        },
-      ],
-      creator: "John Doe",
-      created_at: "2022-01-01",
-    },
-    {
-      id: "2",
-      title: "Biology Terms",
-      description: "A deck of flashcards to help you learn biology terms",
-      questions: [
-        {
-          front: "Mitochondria",
-          back: "The powerhouse of the cell",
-        },
-        {
-          front: "Ribosome",
-          back: "Protein synthesis",
-        },
-      ],
-      creator: "Jane Doe",
-      created_at: "2022-01-01",
-    },
-  ]; */
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen pb-20">
@@ -122,7 +86,7 @@ const PublicPage = () => {
           </h1>
           {flashcards.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start justify-start w-full gap-8 mt-2 mb-12">
-              {flashcards.map((flashcard) => (
+              {flashcards.map((flashcard:any) => (
                 <FlashcardDeck
                   key={flashcard?.id}
                   title={flashcard?.title}
@@ -146,13 +110,13 @@ const PublicPage = () => {
           </h1>
           {flashcards.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start justify-start w-full gap-8 mt-2 mb-12">
-              {flashcards.map((flashcard) => (
+              {publicFlashcards.map((flashcard:any) => (
                 <FlashcardDeck
                   key={flashcard?.id}
                   title={flashcard?.title}
                   description={flashcard?.description}
                   numberCards={flashcard?.questions.length}
-                  creator={userData?.firstName + " " + userData?.lastName}
+                  creator={flashcard.userName}
                   createdAt={flashcard?.created_at}
                   docID={flashcard?.id}
                 />

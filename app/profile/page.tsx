@@ -21,6 +21,7 @@ export const Profile = () => {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [dob, setDob] = useState("");
+    const [error, setError] = useState("");
 
     const { isLoading, currentUser } = useAuth();
 
@@ -67,6 +68,7 @@ export const Profile = () => {
         });
         if (!firstName || !lastName || !email || !dob) {
             console.log("All fields are required.");
+            setError("All fields are required.")
             return;
         }
         try {
@@ -76,9 +78,12 @@ export const Profile = () => {
                 email,
                 dob,
             });
+            alert("Data Saved Successfully")
+            setError("")
             console.log("Saved data successfully");
         } catch (error) {
             console.log("Error saving profile data", error);
+            setError("Error saving data")
         }
     };
         if (isLoading) {
@@ -101,6 +106,7 @@ export const Profile = () => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
+                {error && <p className="text-red-500">{error}</p>}
                     <form onSubmit={handleSubmit}>
                         <div className="flex flex-col gap-4">
                             <div className="flex flex-col">
@@ -137,6 +143,7 @@ export const Profile = () => {
                                     value={email}
                                     onChange={handleChange}
                                     className="mt-2"
+                                    disabled
                                 />
                             </div>
                             <div className="flex flex-col">
