@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash } from "lucide-react";
+import { useEffect } from "react";
 
 interface ManualFlashcardsProps {
     cards: { front: string; back: string }[];
@@ -41,6 +42,10 @@ const ManualFlashcards = ({
     const addCard = () => {
         setCards([...cards, { front: "", back: "" }]);
     };
+
+    useEffect(() => {
+        console.log("Cards: ", cards);
+    }, []);
 
     return (
         <>
