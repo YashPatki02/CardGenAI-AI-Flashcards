@@ -68,7 +68,7 @@ const Pricing = () => {
             <p className="text-center text-lg max-w-2xl text-muted-foreground">
                 Choose the plan that best fits your needs.
             </p>
-            <div className="mt-7 grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-7 grid w-full grid-cols-1 gap-6 md:grid-cols-2 px-2 sm:px-6 md:px-10 lg:px-32">
                 <motion.div variants={cardVariants}>
                     <Card className="relative shadow-lg">
                         <CardContent className="divide-y p-0">
@@ -196,7 +196,7 @@ const Pricing = () => {
                         </CardContent>
                     </Card>
                 </motion.div>
-                <motion.div variants={cardVariants}>
+                {/* <motion.div variants={cardVariants}>
                     <Card className="relative shadow-lg">
                         <CardContent className="divide-y p-0">
                             <div className="flex flex-col items-center px-7 py-10">
@@ -257,10 +257,11 @@ const Pricing = () => {
                             </ul>
                         </CardContent>
                     </Card>
-                </motion.div>
+                </motion.div> */}
             </div>
         </motion.section>
     );
 };
 
 export default Pricing;
+

@@ -30,7 +30,7 @@ export default function Home() {
                     <div className="flex flex-col items-center justify-start min-h-screen">
                         <HeroColumns />
                         <Pricing />
-                        <Testimonials />
+                        {/* <Testimonials /> */}
                         <FAQ />
                         <CTA />
                     </div>

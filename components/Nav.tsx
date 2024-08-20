@@ -55,7 +55,7 @@ const Nav = () => {
         }
     }
     return (
-        <header className="flex flex-row w-full items-center justify-between px-12 py-4 shadow-md">
+        <header className="flex flex-row w-full items-center justify-between px-4 sm:px-12 py-4 shadow-md">
             <Link href="/" className="flex flex-row gap-2 items-center">
                 <NotepadTextDashed
                     size={24}
