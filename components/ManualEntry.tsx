@@ -16,6 +16,7 @@ import ManualFlashcards from "./ManualFlashcards";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { addFlashcard } from "@/lib/firebaseUtils";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const ManualEntry = () => {
     const { currentUser } = useAuth();
@@ -28,6 +29,7 @@ const ManualEntry = () => {
 
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
+    const [privateDeck, setPrivateDeck] = useState<boolean>(true);
 
     const getFormattedDate = () => {
         const today = new Date();
@@ -58,7 +60,7 @@ const ManualEntry = () => {
         const flashcard_obj = {
             title: title,
             description: description,
-            private: true,
+            private: privateDeck,
             questions: cards,
             created_at: getFormattedDate(),
         };
@@ -83,28 +85,44 @@ const ManualEntry = () => {
             </CardHeader>
             <CardContent>
                 <form className="flex flex-col gap-4">
-                    <Label htmlFor="title">Title</Label>
-                    <Input
-                        id="title"
-                        type="text"
-                        placeholder="Title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                    <Label htmlFor="description">Description</Label>
-                    <Input
-                        id="description"
-                        type="text"
-                        placeholder="Description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
+                    <div>
+                        <Label htmlFor="title">Title</Label>
+                        <Input
+                            id="title"
+                            type="text"
+                            placeholder="Title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="description">Description</Label>
+                        <Input
+                            id="description"
+                            type="text"
+                            placeholder="Description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            required
+                        />
+                    </div>
                 </form>
                 <ManualFlashcards
                     cards={cards}
                     setCards={setCards}
                     allowAdd={cards.length < 15}
                 />
+                <div className="flex flex-row gap-2 mt-2">
+                    <Checkbox
+                        id="private"
+                        onCheckedChange={() => setPrivateDeck(!privateDeck)}
+                        checked={privateDeck}
+                    />
+                    <Label htmlFor="private" className="text-sm">
+                        Make the Deck Private
+                    </Label>
+                </div>
                 <Separator className="my-4" />
                 {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Card,
     CardContent,
@@ -17,17 +17,37 @@ import { Badge } from "@/components/ui/badge";
 import UploadFile from "@/components/UploadFile";
 import Generate from "@/components/Generate";
 import ManualEntry from "@/components/ManualEntry";
+import { useAuth } from "@/context/AuthContext";
+import { redirect } from "next/navigation";
+import { LoaderCircle } from "lucide-react";
 
 const Create = () => {
     const [selected, setSelected] = useState("manual");
-
+    const { currentUser, isLoading } = useAuth();
     const tabs = [
         { id: "manual", label: "Manual Entry" },
         { id: "aigen", label: "AI Generated" },
         { id: "upload", label: "Upload File" },
         { id: "youtube", label: "YouTube URL" },
     ];
+    useEffect(() => {
+    if (!isLoading) {
+        if (!currentUser) {
+        redirect("/login");
+        }
+    }
+    }, [currentUser,isLoading]);
 
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <LoaderCircle
+                    className="text-primary animate-spin mb-20"
+                    size={48}
+                />
+            </div>
+        );
+    }
     return (
         <section className="container flex flex-col items-start gap-8 pt-8 px-8 md:px-20 sm:gap-10 min-h-screen">
             <h2 className="text-2xl font-semibold">

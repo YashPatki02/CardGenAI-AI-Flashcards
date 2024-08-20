@@ -1,8 +1,8 @@
 "use client";
-import { getFlashcardByDocId } from "@/lib/firebaseUtils";
+import { deleteFlashcard, getFlashcardByDocId } from "@/lib/firebaseUtils";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +14,8 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Link from "next/link";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "@/firebase";
 
 export default function Flashcard({ params }: { params: { docId: string } }) {
     interface Question {
@@ -35,7 +37,9 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
     const [flipped, setFlipped] = useState<boolean[]>([]);
     const [viewMode, setViewMode] = useState<"single" | "all">("single");
     const [flashcardLoading, setFlashcardLoading] = useState(false);
-
+    const [deleteLoading, setDeleteLoading] = useState(false);
+    const router = useRouter()
+    
     useEffect(() => {
         const getData = async () => {
             setFlashcardLoading(true);
@@ -133,7 +137,17 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
             </div>
         );
     }
-
+    // ! handle delete flashcard
+    const handleDeleteFlashcard = async () => {
+      const result = await deleteFlashcard(currentUser!.uid, params.docId);
+      setDeleteLoading(true);
+      if (result.success) {
+        router.push("/flashcards");
+      } else {
+        alert(`Error deleting document try again later`);
+      }
+      setDeleteLoading(false);
+    };
     if (!flashcard) {
         return (
             <div className="flex flex-col pb-20 justify-center items-center h-screen">
@@ -158,9 +172,10 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
                         <Button
                             className="text-md font-semibold"
                             size="default"
-                            variant="destructive"
+                            onClick={handleDeleteFlashcard}
+                            disabled={deleteLoading}
                         >
-                            Delete
+                            {deleteLoading ? 'Deleting...' : 'Delete'}
                         </Button>
                     </div>
                 </div>
@@ -263,7 +278,7 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
                 </div>
             ) : (
                 <div className="flex flex-row items-center justify-center w-full">
-                    <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {flashcard?.questions.map(
                             (question: Question, index: number) => (
                                 <Card

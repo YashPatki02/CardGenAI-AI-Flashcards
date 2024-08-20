@@ -11,7 +11,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 
 interface ManualFlashcardsProps {
     cards: { front: string; back: string }[];
@@ -48,11 +48,12 @@ const ManualFlashcards = ({
                 {cards.map((card, index) => (
                     <div
                         key={index}
-                        className="flex flex-row gap-4 items-start border-b border-gray-200 py-4"
+                        className="flex flex-row gap-4 items-center border-b border-gray-200 py-4"
                     >
                         <div className="rounded-full bg-primary text-white p-3 w-4 h-4 items-center justify-center flex">
                             <p className="text-sm">{index + 1}</p>
                         </div>
+
                         <div className="w-1/2">
                             <Label htmlFor="front" className="text-sm">
                                 Front
@@ -67,6 +68,7 @@ const ManualFlashcards = ({
                                     updatedCards[index].front = e.target.value;
                                     setCards(updatedCards);
                                 }}
+                                required
                             />
                         </div>
                         <div className="w-1/2">
@@ -82,8 +84,24 @@ const ManualFlashcards = ({
                                     setCards(updatedCards);
                                 }}
                                 maxLength={140}
+                                required
                             />
                         </div>
+                        <Button
+                            onClick={() => {
+                                if (cards.length > 1) {
+                                    const updatedCards = cards.filter(
+                                        (_, i) => i !== index
+                                    );
+                                    setCards(updatedCards);
+                                } else {
+                                    setCards([{ front: "", back: "" }]);
+                                }
+                            }}
+                            className="p-3 self-end justify-center flex rounded-lg"
+                        >
+                            <Trash size={16} strokeWidth={2} />
+                        </Button>
                     </div>
                 ))}
                 {allowAdd && (

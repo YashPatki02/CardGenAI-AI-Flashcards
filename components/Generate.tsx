@@ -18,6 +18,7 @@ import { addFlashcard } from "@/lib/firebaseUtils";
 import { useAuth } from "@/context/AuthContext";
 import { Textarea } from "@/components/ui/textarea";
 import ManualFlashcards from "./ManualFlashcards";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 
 export default function Generate() {
@@ -31,6 +32,7 @@ export default function Generate() {
     const [flashcard, setFlashcard] = useState<Flashcard[]>([]);
     const [prompt, setPrompt] = useState<string>("");
     const [number, setNumber] = useState<number>(1);
+    const [privateDeck, setPrivateDeck] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
@@ -88,7 +90,7 @@ export default function Generate() {
         const flashcard_obj = {
             title: title,
             description: description,
-            private: true,
+            private: privateDeck,
             questions: flashcard,
             created_at: getFormattedDate(),
         };
@@ -161,24 +163,30 @@ export default function Generate() {
                             Flashcards Deck Details
                         </h3>
                         <div className="flex flex-col gap-2 w-full">
-                            <Label htmlFor="Title">Title</Label>
-                            <Input
-                                type="text"
-                                id="Title"
-                                placeholder="Enter Title..."
-                                required
-                                onChange={(e) => setTitle(e.target.value)}
-                                value={title}
-                            />
-
-                            <Label htmlFor="Description">Description</Label>
-                            <Input
-                                type="text"
-                                id="Description"
-                                placeholder="Enter Description..."
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                            />
+                            <div>
+                                <Label htmlFor="Title">Title</Label>
+                                <Input
+                                    type="text"
+                                    id="Title"
+                                    placeholder="Enter Title..."
+                                    required
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    value={title}
+                                />
+                            </div>
+                            <div>
+                                <Label htmlFor="Description">Description</Label>
+                                <Input
+                                    type="text"
+                                    id="Description"
+                                    placeholder="Enter Description..."
+                                    value={description}
+                                    onChange={(e) =>
+                                        setDescription(e.target.value)
+                                    }
+                                    required
+                                />
+                            </div>
                         </div>
 
                         <ManualFlashcards
@@ -186,6 +194,18 @@ export default function Generate() {
                             setCards={setFlashcard}
                             allowAdd={false}
                         />
+                        <div className="flex flex-row gap-2">
+                            <Checkbox
+                                id="private"
+                                checked={privateDeck}
+                                onCheckedChange={() =>
+                                    setPrivateDeck(!privateDeck)
+                                }
+                            />
+                            <Label htmlFor="private" className="text-sm ">
+                                Make the Deck Private
+                            </Label>
+                        </div>
                         {error && (
                             <p className="text-red-500 text-sm mb-4">{error}</p>
                         )}
