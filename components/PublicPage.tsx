@@ -19,7 +19,7 @@ const PublicPage = () => {
     async function getPublicFlashcard() {
       try {
         const data: any = await getFlashcardsForAllUsers(currentUser.uid);
-        if (data !== []) {
+        if (data) {
           setPublicFlashcards(data);
           console.log("successfully added");
           console.log(data);
@@ -85,7 +85,7 @@ const PublicPage = () => {
             Your Recent Decks
           </h1>
           {flashcards.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start justify-start w-full gap-8 mt-2 mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start justify-start w-full gap-8 mb-12">
               {flashcards.map((flashcard:any) => (
                 <FlashcardDeck
                   key={flashcard?.id}
@@ -109,7 +109,7 @@ const PublicPage = () => {
             Public Flashcards
           </h1>
           {flashcards.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start justify-start w-full gap-8 mt-2 mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start justify-start w-full gap-8 mb-12">
               {publicFlashcards.map((flashcard:any) => (
                 <FlashcardDeck
                   key={flashcard?.id}

@@ -108,7 +108,7 @@ const Flashcards = () => {
             </div>
 
             {flashcards.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start justify-start w-full gap-8 mt-2 mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start justify-start w-full gap-8 mb-12">
                     {flashcards.map((flashcard) => (
                         <FlashcardDeck
                             key={flashcard?.id}
