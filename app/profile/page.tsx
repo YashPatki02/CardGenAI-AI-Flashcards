@@ -14,6 +14,7 @@ import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { LoaderCircle } from "lucide-react";
 
 export const Profile = () => {
     const [firstName, setFirstName] = useState("");
@@ -80,7 +81,16 @@ export const Profile = () => {
             console.log("Error saving profile data", error);
         }
     };
-
+        if (isLoading) {
+          return (
+            <div className="flex justify-center items-center h-screen">
+              <LoaderCircle
+                className="text-primary animate-spin mb-20"
+                size={48}
+              />
+            </div>
+          );
+        }
     return (
         <div className="flex justify-center items-center h-screen mb-20">
             <Card className="w-full max-w-md">
