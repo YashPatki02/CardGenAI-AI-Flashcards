@@ -65,7 +65,7 @@ const Features = () => {
                                 </h3>
                                 <p className="text-muted-foreground">
                                     Create flashcards with ease with the help of
-                                    AI.
+                                    AI or with file uploads.
                                 </p>
                             </div>
                         </CardContent>

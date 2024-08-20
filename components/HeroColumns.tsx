@@ -92,17 +92,18 @@ const HeroColumns = () => {
                     </motion.div>
                 </motion.div>
                 <motion.div
-                    className="flex items-center justify-center mt-20 sm:mt-8 mb-4 lg:mt-0 lg:w-1/2"
+                    className="flex items-center justify-center mt-12 sm:mt-8 mb-4 lg:mt-0 lg:w-1/2"
                     variants={variants}
                     initial="hidden"
                     animate="visible"
                 >
                     <motion.div
                         className="z-10"
-                        whileHover={{ x: 40, y: -10, rotate: 3, zIndex: 0 }}
+                        initial={{ x: 20, y: -10, rotate: 2 }}
+                        whileHover={{ x: 40, y: -5, rotate: 3, zIndex: 0 }}
                         transition={{ type: "spring", stiffness: 300 }}
                     >
-                        <Card className="relative w-[180px] min-h-[250px] sm:w-[240px] sm:min-h-[320px] md:w-[300px] md:min-h-[400px] flex flex-col items-center justify-center py-6 px-2 cursor-pointer">
+                        <Card className="relative w-[160px] min-h-[230px] sm:w-[240px] sm:min-h-[320px] md:w-[290px] md:min-h-[400px] flex flex-col items-center justify-center py-6 px-2 cursor-pointer">
                             <CardContent>
                                 <p className="absolute right-0 left-0 top-4 text-center text-sm font-semibold text-primary">
                                     1/3
@@ -118,11 +119,11 @@ const HeroColumns = () => {
                     </motion.div>
                     <motion.div
                         className="z-0"
-                        initial={{ x: -80, y: 10, rotate: -2 }}
-                        whileHover={{ x: -70, y: 5, rotate: -6, zIndex: 10 }}
+                        initial={{ x: -20, y: 10, rotate: -3 }}
+                        whileHover={{ x: -60, y: 5, rotate: -6, zIndex: 10 }}
                         transition={{ type: "spring", stiffness: 300 }}
                     >
-                        <Card className="relative w-[180px] min-h-[250px] sm:w-[240px] sm:min-h-[320px] md:w-[300px] md:min-h-[400px] md:-ml-6 flex flex-col items-center justify-center py-6 px-2 cursor-pointer">
+                        <Card className="relative w-[160px] min-h-[230px] sm:w-[240px] sm:min-h-[320px] md:w-[290px] md:min-h-[400px] md:-ml-6 flex flex-col items-center justify-center py-6 px-2 cursor-pointer">
                             <CardContent>
                                 <p className="absolute right-0 left-0 top-4 text-center text-sm font-semibold text-primary">
                                     1/3
