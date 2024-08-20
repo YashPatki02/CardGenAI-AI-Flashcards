@@ -20,7 +20,6 @@ export async function POST(req) {
     }
     const file = formData.get("pdfFile");
     const instructions = formData.get("instructions");
-    console.log("These are the instructions: ", instructions);
     if (!file || file.type !== "application/pdf") {
         return NextResponse.json(
             { error: "Invalid file type. Please upload a PDF file." },
@@ -32,7 +31,6 @@ export async function POST(req) {
         const pdfText = await extractTextFromPdf(pdfBuffer);
         try {
             const flashcards = await getFlashcards(pdfText, instructions);
-            console.log("Returned data from OPENAI: ", flashcards);
             return NextResponse.json({ flashcards });
         } catch (error) {
             console.error("Error generating cards:", error);

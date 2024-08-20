@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,10 +40,6 @@ export default function UploadFile() {
     const handleChangeInstructions = (e: any) => {
         setInstructions(e.target.value);
     };
-
-    useEffect(() => {
-        console.log("flashcards: ", flashcards);
-    }, [flashcards]);
 
     const handleFileChange = (e: { target: { files: any } }) => {
         console.log("in file change ", e.target.files);
