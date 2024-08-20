@@ -27,7 +27,7 @@ export async function POST(req) {
             { role: "system", content: systemPrompt },
             { role: "user", content: prompt },
         ],
-        model: "gpt-3.5-turbo",
+        model: "gpt-4o-mini",
         response_format: { type: "json_object" },
     });
 

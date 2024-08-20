@@ -25,7 +25,6 @@ const Pricing = () => {
     };
 
     const handleSubmit = async (priceId: string): Promise<void> => {
-        console.log("priceId ", priceId);
         const checkoutSession = await fetch("/api/checkout_sessions", {
             method: "POST",
             headers: { origin: "http://localhost:3000" },
@@ -86,7 +85,10 @@ const Pricing = () => {
                                     </span>
                                     <span className="text-sm">/month</span>
                                 </div>
-                                <Button className="mt-8 w-full" onClick={() => router.push('/login')}>
+                                <Button
+                                    className="mt-8 w-full"
+                                    onClick={() => router.push("/login")}
+                                >
                                     Get Started
                                 </Button>
                             </div>
@@ -94,7 +96,7 @@ const Pricing = () => {
                                 <li className="flex items-center gap-2">
                                     <Check size={24} className="text-primary" />
                                     <span className="text-muted-foreground">
-                                        Upto 3 Flashcard Decks
+                                        Up to 3 Flashcard Decks
                                     </span>
                                 </li>
                                 <li className="flex items-center gap-2">
@@ -106,7 +108,7 @@ const Pricing = () => {
                                 <li className="flex items-center gap-2">
                                     <Check size={24} className="text-primary" />
                                     <span className="text-muted-foreground">
-                                        Upto 20 Flashcards per Deck
+                                        Up to 20 Flashcards per Deck
                                     </span>
                                 </li>
                                 <li className="flex items-center gap-2">

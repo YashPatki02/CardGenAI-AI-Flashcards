@@ -9,7 +9,6 @@ export async function POST(req) {
     try {
         const body = await req.json(); // Parsing the JSON body
         const { priceId } = body;
-        console.log("PRICEEE ", priceId);
         const params = {
             mode: "subscription",
             payment_method_types: ["card"],

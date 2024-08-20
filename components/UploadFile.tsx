@@ -14,14 +14,20 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 export default function UploadFile() {
+    // Add types here
     const [file, setFile] = useState(null);
     const [fileLoading, setFileLoading] = useState(false);
+    const [instructions, setInstructions] = useState("");
     const [error, setError] = useState("");
     const [showSubmit, setShowSubmit] = useState(false);
     const [cardList, setCardList] = useState([]);
 
+    const handleChangeInstructions = (e: any) => {
+        setInstructions(e.target.value);
+    };
+
     const handleFileChange = (e: { target: { files: any } }) => {
-        console.log(e.target.files);
+        console.log("in file change ", e.target.files);
         const tempfile = e.target.files[0];
         if (tempfile && tempfile.type === "application/pdf") {
             setShowSubmit(true);
@@ -41,17 +47,14 @@ export default function UploadFile() {
         setCardList([]);
 
         const formData = new FormData();
-        console.log(file);
-        formData.set("file", file);
-        // formData.append("file", file);
-        console.log(formData);
-        console.log(typeof formData);
+        console.log("file in submit: ", file);
+        formData.set("pdfFile", file);
+        formData.set("instructions", instructions);
 
         try {
             const res = await fetch("/api/uploadfile", {
                 method: "POST",
                 body: formData,
-                // body: "sent to the server",
             });
 
             if (!res.ok) {
@@ -96,14 +99,14 @@ export default function UploadFile() {
                             {error}
                         </p>
                     )}
-                    <Label htmlFor="number">Number of cards</Label>
+                    <Label htmlFor="instructions">Instructions</Label>
                     <Input
-                        id="number"
-                        type="number"
-                        placeholder="Number of cards"
-                        min="1"
-                        max="15"
+                        id="description"
+                        type="text"
+                        placeholder="Add any instructions you want in generating your flashcards. (e.g. number of cards, things you want to focus on, etc.)"
                         required
+                        value={instructions}
+                        onChange={handleChangeInstructions}
                     />
                     <Button
                         disabled={!showSubmit || fileLoading}
