@@ -14,9 +14,12 @@ const PublicPage = () => {
     const [publicFlashcards, setPublicFlashcards] = useState<any>([]);
     const [flashcards, setFlashcards] = useState<any>([]);
     const [userData, setUserData] = useState<any | null>(null);
-    // *
+    const [publicFlashcardsLoading, setPublicFlashcardsLoading] =
+        useState(false);
+
     useEffect(() => {
         async function getPublicFlashcard() {
+            setPublicFlashcardsLoading(true);
             try {
                 const data: any = await getFlashcardsForAllUsers(
                     currentUser.uid
@@ -31,6 +34,8 @@ const PublicPage = () => {
             } catch (error) {
                 console.log("unable to get data");
                 console.log(error);
+            } finally {
+                setPublicFlashcardsLoading(false);
             }
         }
         async function userFlashcard() {
@@ -113,6 +118,14 @@ const PublicPage = () => {
                     <h1 className="text-xl font-semibold sm:text-2xl">
                         Public Flashcards
                     </h1>
+                    {publicFlashcardsLoading && (
+                        <div className="flex w-full justify-center items-center">
+                            <LoaderCircle
+                                size={32}
+                                className="animate-spin text-primary"
+                            />
+                        </div>
+                    )}
                     {flashcards.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start justify-start w-full gap-6 mb-20">
                             {publicFlashcards.map((flashcard: any) => (

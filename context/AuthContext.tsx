@@ -51,6 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           firstName: "",
           lastName: "",
           dob: "",
+          subscription: "Free",
         };
         await registerUser(user.uid, data);
         setCurrentUser(user);

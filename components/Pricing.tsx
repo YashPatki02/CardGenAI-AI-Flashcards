@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Check } from "lucide-react";
@@ -6,12 +6,31 @@ import getStripe from "@/utils/get-stripe";
 import { motion, useInView } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { getUserById } from "@/lib/firebaseUtils";
 
 const Pricing = ({ hidden = false }) => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
     const router = useRouter();
     const { currentUser } = useAuth();
+    const [userSubscription, setUserSubscription] = useState<string | null>(
+        null
+    );
+
+    useEffect(() => {
+        const getUserData = async () => {
+            const userData: any = await getUserById(currentUser.uid);
+            setUserSubscription(userData.subscription);
+        };
+
+        if (currentUser) {
+            try {
+                getUserData();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }, [currentUser]);
 
     const cardVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -29,7 +48,7 @@ const Pricing = ({ hidden = false }) => {
     const handleSubmit = async (priceId: string): Promise<void> => {
         const checkoutSession = await fetch("/api/checkout_sessions", {
             method: "POST",
-            headers: { origin: "http://localhost:3000/pricing/" },
+            headers: { origin: "http://localhost:3000/" },
             body: JSON.stringify({ priceId }),
         });
         const checkoutSessionJson = await checkoutSession.json();
@@ -106,7 +125,9 @@ const Pricing = ({ hidden = false }) => {
                                         }
                                     }}
                                 >
-                                    {currentUser ? "Go to Decks" : "Get Started"}
+                                    {currentUser
+                                        ? "Go to Decks"
+                                        : "Get Started"}
                                 </Button>
                             </div>
                             <ul className="p-7 py-10 space-y-2">
@@ -168,14 +189,20 @@ const Pricing = ({ hidden = false }) => {
                                     <span className="text-sm">/month</span>
                                 </div>
                                 <Button
-                                    onClick={() =>
-                                        handleSubmit(
-                                            "price_1PpGTSFJSAPpXIUXTZctLMqF"
-                                        )
-                                    }
+                                    onClick={() => {
+                                        if (userSubscription === "Free") {
+                                            handleSubmit(
+                                                "price_1PpGTSFJSAPpXIUXTZctLMqF"
+                                            );
+                                        } else {
+                                            router.push("/flashcards");
+                                        }
+                                    }}
                                     className="mt-8 w-full"
                                 >
-                                    {currentUser ? "Upgrade Plan" : "Get Started"}
+                                    {userSubscription === "Free"
+                                        ? "Upgrade Plan"
+                                        : "Your Current Plan - Go to Decks"}
                                 </Button>
                             </div>
                             <ul className="p-7 py-10 space-y-2">

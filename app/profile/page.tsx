@@ -14,13 +14,15 @@ import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { LoaderCircle } from "lucide-react";
+import {LoaderCircle } from "lucide-react";
+import Link from "next/link";
 
 export const Profile = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [dob, setDob] = useState("");
+    const [subscription, setSubscription] = useState("");
     const [error, setError] = useState("");
 
     const { isLoading, currentUser } = useAuth();
@@ -34,6 +36,7 @@ export const Profile = () => {
                 setLastName(data?.lastName || "");
                 setEmail(data?.email || "");
                 setDob(data?.dob || "");
+                setSubscription(data?.subscription || "");
             } catch (err) {
                 console.log(err);
             }
@@ -65,10 +68,11 @@ export const Profile = () => {
             lastName,
             email,
             dob,
+            subscription,
         });
         if (!firstName || !lastName || !email || !dob) {
             console.log("All fields are required.");
-            setError("All fields are required.")
+            setError("All fields are required.");
             return;
         }
         try {
@@ -77,25 +81,26 @@ export const Profile = () => {
                 lastName,
                 email,
                 dob,
+                subscription,
             });
-            alert("Data Saved Successfully")
-            setError("")
+            alert("Data Saved Successfully");
+            setError("");
             console.log("Saved data successfully");
         } catch (error) {
             console.log("Error saving profile data", error);
-            setError("Error saving data")
+            setError("Error saving data");
         }
     };
-        if (isLoading) {
-          return (
+    if (isLoading) {
+        return (
             <div className="flex justify-center items-center h-screen">
-              <LoaderCircle
-                className="text-primary animate-spin mb-20"
-                size={48}
-              />
+                <LoaderCircle
+                    className="text-primary animate-spin mb-20"
+                    size={48}
+                />
             </div>
-          );
-        }
+        );
+    }
     return (
         <div className="flex justify-center mt-20 mb-20">
             <Card className="w-full max-w-md h-auto">
@@ -106,7 +111,7 @@ export const Profile = () => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                {error && <p className="text-red-500">{error}</p>}
+                    {error && <p className="text-red-500">{error}</p>}
                     <form onSubmit={handleSubmit}>
                         <div className="flex flex-col gap-4">
                             <div className="flex flex-col">
@@ -159,6 +164,27 @@ export const Profile = () => {
                                     min="1900-01-01"
                                     max={new Date().toISOString().split("T")[0]}
                                 />
+                            </div>
+                            <div className="flex flex-col">
+                                <Label htmlFor="subscription">
+                                    Subscription
+                                </Label>
+                                <div className="flex flex-row gap-2 items-end">
+                                    <Input
+                                        type="text"
+                                        id="subscription"
+                                        name="subscription"
+                                        value={subscription}
+                                        onChange={handleChange}
+                                        className="mt-2"
+                                        disabled
+                                    />
+                                    {subscription === "Free" && (
+                                        <Link href="/pricing">
+                                            <Button>Upgrade</Button>
+                                        </Link>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </form>

@@ -18,25 +18,78 @@ import UploadFile from "@/components/UploadFile";
 import Generate from "@/components/Generate";
 import ManualEntry from "@/components/ManualEntry";
 import { useAuth } from "@/context/AuthContext";
-import { redirect } from "next/navigation";
-import { LoaderCircle } from "lucide-react";
+import { redirect, useRouter } from "next/navigation";
+import { LoaderCircle, X } from "lucide-react";
+import {
+    getFlashcardsByUserId,
+    getUserById
+} from "@/lib/firebaseUtils";
+import Link from "next/link";
 
 const Create = () => {
     const [selected, setSelected] = useState("manual");
     const { currentUser, isLoading } = useAuth();
+    const [flashcards, setFlashcards] = useState<any[]>([]);
+    const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+    const [userSubscription, setUserSubscription] = useState<string | null>(
+        null
+    );
+    const router = useRouter();
+
     const tabs = [
         { id: "manual", label: "Manual Entry" },
         { id: "aigen", label: "AI Generated" },
         { id: "upload", label: "Upload File" },
         { id: "youtube", label: "YouTube URL" },
     ];
+
     useEffect(() => {
-    if (!isLoading) {
-        if (!currentUser) {
-        redirect("/login");
+        if (!isLoading) {
+            if (!currentUser) {
+                redirect("/login");
+            } else {
+                const getFlashcards = async () => {
+                    try {
+                        const data: any = await getFlashcardsByUserId(
+                            currentUser.uid
+                        );
+                        setFlashcards(data);
+                    } catch (err) {
+                        console.log(err);
+                    }
+                };
+
+                getFlashcards();
+            }
         }
-    }
-    }, [currentUser,isLoading]);
+    }, [currentUser, isLoading, flashcards]);
+
+    useEffect(() => {
+        const getSubscription = async () => {
+            try {
+                const userData: any = await getUserById(currentUser.uid);
+                setUserSubscription(userData.subscription);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        if (currentUser) {
+            getSubscription();
+        }
+    }, [currentUser]);
+
+    useEffect(() => {
+        if (flashcards.length >= 3 && userSubscription === "Free") {
+            setShowUpgradeModal(true);
+        }
+    }, [flashcards, userSubscription]);
+
+    const handleOverlayClick = (e: any) => {
+        if (e.target.id === "overlay") {
+            router.push("/flashcards");
+        }
+    };
 
     if (isLoading) {
         return (
@@ -48,8 +101,34 @@ const Create = () => {
             </div>
         );
     }
+
     return (
-        <section className="container flex flex-col items-start gap-8 pt-8 px-8 md:px-20 sm:gap-10 min-h-screen">
+        <section className="container relative flex flex-col items-start gap-8 pt-8 px-8 md:px-20 sm:gap-10 min-h-screen">
+            {showUpgradeModal && (
+                <div
+                    id="overlay"
+                    className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-20"
+                    onClick={handleOverlayClick}
+                >
+                    <div className="relative bg-white dark:bg-gray-800 px-8 py-12 border-2 rounded-lg shadow-md max-w-lg w-full z-30">
+                        <h2 className="text-2xl font-semibold">
+                            You Have Reached Limit of 3 Decks for the Free Plan
+                        </h2>
+                        <p className="text-lg text-muted-foreground">
+                            Upgrade to create more decks
+                        </p>
+                        <div className="mt-4 flex gap-4">
+                            <Link href="/pricing">
+                                <Button>Upgrade Now</Button>
+                            </Link>
+                            <Link href="/flashcards">
+                                <Button variant="ghost">Back to Decks</Button>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <h2 className="text-2xl font-semibold">
                 Create a New Flashcard Deck
             </h2>

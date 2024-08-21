@@ -48,7 +48,7 @@ const FlashcardDeck = ({
             <CardFooter className="flex justify-end">
                 {/* <Button variant="outline">View Deck</Button> */}
                 <Link href={`/flashcards/${docID}`} passHref>
-                    <Button>View</Button>
+                    <Button>View Deck</Button>
                 </Link>
             </CardFooter>
         </Card>
