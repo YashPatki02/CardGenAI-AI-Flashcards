@@ -97,8 +97,8 @@ export const Profile = () => {
           );
         }
     return (
-        <div className="flex justify-center items-center h-screen mb-20">
-            <Card className="w-full max-w-md">
+        <div className="flex justify-center mt-20 mb-20">
+            <Card className="w-full max-w-md h-auto">
                 <CardHeader>
                     <CardTitle>Update Your User Profile</CardTitle>
                     <CardDescription>

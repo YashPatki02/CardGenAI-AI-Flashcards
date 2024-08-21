@@ -11,7 +11,7 @@ import {
     CardTitle,
     CardDescription,
 } from "@/components/ui/card";
-import { Checkbox } from "@radix-ui/react-checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 import ManualFlashcards from "./ManualFlashcards";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
@@ -123,17 +123,16 @@ export default function UploadFile() {
     };
 
     return (
-        <div className="w-full relative mb-20">
-            {flashcards.length === 0 ? (
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Upload File</CardTitle>
-                        <CardDescription>
-                            Upload a PDF File with content to generate
-                            flashcards
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
+        <div className="w-full mb-20">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Upload File</CardTitle>
+                    <CardDescription>
+                        Upload a PDF File with content to generate flashcards
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {flashcards.length === 0 && (
                         <form className="flex flex-col gap-4">
                             <Label htmlFor="file" className="hidden">
                                 Choose a file
@@ -168,11 +167,8 @@ export default function UploadFile() {
                                     : "Generate Cards"}
                             </Button>
                         </form>
-                    </CardContent>
-                </Card>
-            ) : (
-                <Card>
-                    <CardContent>
+                    )}
+                    {flashcards.length > 0 && (
                         <div className="flex flex-col gap-4">
                             <h3 className="text-lg font-semibold">
                                 Flashcards Deck Details
@@ -234,9 +230,9 @@ export default function UploadFile() {
                                 Create Flashcard Deck
                             </Button>
                         </div>
-                    </CardContent>
-                </Card>
-            )}
+                    )}
+                </CardContent>
+            </Card>
         </div>
     );
 }

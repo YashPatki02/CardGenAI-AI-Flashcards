@@ -5,11 +5,13 @@ import { Check } from "lucide-react";
 import getStripe from "@/utils/get-stripe";
 import { motion, useInView } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
-const Pricing = () => {
+const Pricing = ({ hidden = false }) => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
     const router = useRouter();
+    const { currentUser } = useAuth();
 
     const cardVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -27,7 +29,7 @@ const Pricing = () => {
     const handleSubmit = async (priceId: string): Promise<void> => {
         const checkoutSession = await fetch("/api/checkout_sessions", {
             method: "POST",
-            headers: { origin: "http://localhost:3000" },
+            headers: { origin: "http://localhost:3000/pricing/" },
             body: JSON.stringify({ priceId }),
         });
         const checkoutSessionJson = await checkoutSession.json();
@@ -57,17 +59,26 @@ const Pricing = () => {
                 },
             }}
         >
-            <div className="flex flex-col gap-3">
-                <span className="font-bold uppercase text-primary text-center">
-                    Pricing
-                </span>
-                <h2 className="text-3xl font-heading font-semibold text-center sm:text-4xl">
-                    Simplified Pricing Plans
+            {!hidden && (
+                <>
+                    <div className="flex flex-col gap-3">
+                        <span className="font-bold uppercase text-primary text-center">
+                            Pricing
+                        </span>
+                        <h2 className="text-3xl font-heading font-semibold text-center sm:text-4xl">
+                            Simplified Pricing Plans
+                        </h2>
+                    </div>
+                    <p className="text-center text-lg max-w-2xl text-muted-foreground">
+                        Choose the plan that best fits your needs.
+                    </p>
+                </>
+            )}
+            {hidden && (
+                <h2 className="text-2xl font-heading font-semibold text-center sm:text-3xl">
+                    Choose a Plan
                 </h2>
-            </div>
-            <p className="text-center text-lg max-w-2xl text-muted-foreground">
-                Choose the plan that best fits your needs.
-            </p>
+            )}
             <div className="mt-7 grid w-full grid-cols-1 gap-6 md:grid-cols-2 px-2 sm:px-6 md:px-10 lg:px-32">
                 <motion.div variants={cardVariants}>
                     <Card className="relative shadow-lg">
@@ -87,9 +98,15 @@ const Pricing = () => {
                                 </div>
                                 <Button
                                     className="mt-8 w-full"
-                                    onClick={() => router.push("/login")}
+                                    onClick={() => {
+                                        if (currentUser) {
+                                            router.push("/flashcards");
+                                        } else {
+                                            router.push("/register");
+                                        }
+                                    }}
                                 >
-                                    Get Started
+                                    {currentUser ? "Go to Decks" : "Get Started"}
                                 </Button>
                             </div>
                             <ul className="p-7 py-10 space-y-2">
@@ -158,7 +175,7 @@ const Pricing = () => {
                                     }
                                     className="mt-8 w-full"
                                 >
-                                    Get Started
+                                    {currentUser ? "Upgrade Plan" : "Get Started"}
                                 </Button>
                             </div>
                             <ul className="p-7 py-10 space-y-2">
@@ -264,4 +281,3 @@ const Pricing = () => {
 };
 
 export default Pricing;
-

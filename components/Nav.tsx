@@ -100,7 +100,7 @@ const Nav = () => {
                                 Profile
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                                onClick={() => router.push("/billing")}
+                                onClick={() => router.push("/pricing")}
                             >
                                 Billing
                             </DropdownMenuItem>
