@@ -176,7 +176,7 @@ const Create = () => {
                                 type="number"
                                 placeholder="Number of cards"
                                 min="1"
-                                max="15"
+                                max="20"
                             />
                             <Button type="submit">Generate Cards</Button>
                         </form>

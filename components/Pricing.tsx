@@ -121,7 +121,7 @@ const Pricing = ({ hidden = false }) => {
                                         if (currentUser) {
                                             router.push("/flashcards");
                                         } else {
-                                            router.push("/register");
+                                            router.push("/login");
                                         }
                                     }}
                                 >
@@ -190,17 +190,23 @@ const Pricing = ({ hidden = false }) => {
                                 </div>
                                 <Button
                                     onClick={() => {
-                                        if (userSubscription === "Free") {
-                                            handleSubmit(
-                                                "price_1PpGTSFJSAPpXIUXTZctLMqF"
-                                            );
+                                        if (!currentUser) {
+                                            router.push("/login");
                                         } else {
-                                            router.push("/flashcards");
+                                            if (userSubscription === "Free") {
+                                                handleSubmit(
+                                                    "price_1PpGTSFJSAPpXIUXTZctLMqF"
+                                                );
+                                            } else {
+                                                router.push("/flashcards");
+                                            }
                                         }
                                     }}
                                     className="mt-8 w-full"
                                 >
-                                    {userSubscription === "Free"
+                                    {!currentUser
+                                        ? "Get Started"
+                                        : userSubscription === "Free"
                                         ? "Upgrade Plan"
                                         : "Your Current Plan - Go to Decks"}
                                 </Button>

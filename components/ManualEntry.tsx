@@ -111,7 +111,7 @@ const ManualEntry = () => {
                 <ManualFlashcards
                     cards={cards}
                     setCards={setCards}
-                    allowAdd={cards.length < 15}
+                    allowAdd={cards.length < 20}
                 />
                 <div className="flex flex-row gap-2 mt-2">
                     <Checkbox

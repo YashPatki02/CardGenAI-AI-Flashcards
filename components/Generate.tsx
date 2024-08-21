@@ -141,7 +141,7 @@ export default function Generate() {
                             type="number"
                             placeholder="Number of cards"
                             min="1"
-                            max="15"
+                            max="20"
                             required
                             onChange={(e) =>
                                 setNumber(parseInt(e.target.value))
