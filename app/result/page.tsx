@@ -1,15 +1,15 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { LoaderCircle } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { upgradeUser } from "@/lib/firebaseUtils";
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 
-const ResultPage = () => {
+const ResultPageContent = () => {
     const searchParams = useSearchParams();
     const session_id = searchParams.get("session_id");
-    const {currentUser, isLoading} = useAuth();
+    const { currentUser, isLoading } = useAuth();
 
     const [loading, setLoading] = useState<boolean>(true);
     const [session, setSession] = useState<any | null>(null);
@@ -40,16 +40,15 @@ const ResultPage = () => {
     useEffect(() => {
         if (session) {
             console.log(session);
-
             if (session.payment_status === "paid") {
                 try {
-                    upgradeUser(currentUser.uid, {subscription: "Pro"});
+                    upgradeUser(currentUser.uid, { subscription: "Pro" });
                 } catch (err) {
                     console.log("Error upgrading user");
                 }
             }
         }
-    }, [session]);
+    }, [session, currentUser]);
 
     if (loading) {
         return (
@@ -109,5 +108,15 @@ const ResultPage = () => {
         </section>
     );
 };
+
+const ResultPage = () => (
+    <Suspense
+        fallback={
+            <LoaderCircle size={48} className="animate-spin text-primary" />
+        }
+    >
+        <ResultPageContent />
+    </Suspense>
+);
 
 export default ResultPage;

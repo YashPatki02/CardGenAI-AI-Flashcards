@@ -44,7 +44,8 @@ const Testimonials = () => {
                 </h2>
             </div>
             <p className="text-center text-lg max-w-2xl text-muted-foreground">
-                Our users love CardGenAI. Here's what they have to say about us.
+                Our users love CardGenAI. Here&apos;s what they have to say
+                about us.
             </p>
             <div className="mt-1 columns-1 gap-5 md:columns-2 lg:columns-3">
                 {[

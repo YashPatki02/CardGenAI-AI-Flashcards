@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import {LoaderCircle } from "lucide-react";
 import Link from "next/link";
 
-export const Profile = () => {
+const Profile = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");

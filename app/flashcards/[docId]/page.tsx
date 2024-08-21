@@ -152,7 +152,7 @@ export default function Flashcard({ params }: { params: { docId: string } }) {
         return (
             <div className="flex flex-col pb-20 justify-center items-center h-screen">
                 <h1 className="text-2xl font-semibold">
-                    Flashcard doesn't exist.
+                    Flashcard doesn&apos;t exist.
                 </h1>
                 <Link href="/flashcards">
                     <Button className="mt-4">Go Back</Button>

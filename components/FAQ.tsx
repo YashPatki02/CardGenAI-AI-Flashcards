@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import {
@@ -56,8 +56,8 @@ const FAQ = () => {
                 transition={{ duration: 0.5 }}
                 className="text-center text-lg max-w-2xl text-muted-foreground"
             >
-                For any questions, feel free to reach out to us. We're here to
-                help.
+                For any questions, feel free to reach out to us. We&apos;re here
+                to help.
             </motion.p>
             <motion.div
                 variants={containerVariants}
@@ -73,7 +73,8 @@ const FAQ = () => {
                             </AccordionTrigger>
                             <AccordionContent className="text-lg text-muted-foreground">
                                 Getting started is easy! Simply create an
-                                account and you're good to go.
+                                account and you&apos;re good to go. Upgrade your
+                                account to create unlimited flashcard decks.
                             </AccordionContent>
                         </AccordionItem>
 
@@ -83,7 +84,9 @@ const FAQ = () => {
                             </AccordionTrigger>
                             <AccordionContent className="text-lg text-muted-foreground">
                                 You can create flashcards by clicking on the
-                                "Create Flashcards" button.
+                                &lsquo;Create Flashcards&rsquo; button. Choose
+                                to create a new deck manually, with a file
+                                upload, or using AI genetation.
                             </AccordionContent>
                         </AccordionItem>
 
@@ -93,17 +96,19 @@ const FAQ = () => {
                             </AccordionTrigger>
                             <AccordionContent className="text-lg text-muted-foreground">
                                 You can access the public library by clicking on
-                                the "Public Library" button.
+                                the &lsquo;Home&rsquo; button once you are
+                                logged in.
                             </AccordionContent>
                         </AccordionItem>
 
                         <AccordionItem value="item-4" className="border-b-0">
                             <AccordionTrigger className="py-6 text-left text-lg hover:no-underline">
-                                How do I share my flashcards?
+                                Can I edit my flashcards that I get from AI?
                             </AccordionTrigger>
                             <AccordionContent className="text-lg text-muted-foreground">
-                                You can share your flashcards by clicking on the
-                                "Share" button.
+                                Yes, you can edit the flashcards that you get
+                                from AI. You can add, remove, or modify any
+                                content on the flashcards.
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>

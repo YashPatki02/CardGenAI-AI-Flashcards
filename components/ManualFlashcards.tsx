@@ -43,10 +43,6 @@ const ManualFlashcards = ({
         setCards([...cards, { front: "", back: "" }]);
     };
 
-    useEffect(() => {
-        console.log("Cards: ", cards);
-    }, []);
-
     return (
         <>
             <form className="flex flex-col gap-2" onSubmit={handleAddCard}>
